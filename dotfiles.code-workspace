@@ -1,0 +1,26 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Debug zsh",
+        "type": "zshdb",
+        "request": "launch",
+        "program": "~/dotfiles/init.zsh",
+        "cwd": "~/dotfiles"
+      }
+    ],
+    "compounds": []
+  },
+  "settings": {
+    "editor.fontFamily": "JetBrainsMono Nerd Font, Hack Nerd Font"
+  },
+  "extensions": {
+    "recommendations": ["tamasfe.even-better-toml", "rogalmic.zsh-debug"]
+  }
+}
