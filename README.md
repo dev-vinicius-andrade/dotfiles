@@ -20,6 +20,15 @@ Checkout the table of contents to navigate through the repository documentation.
     - [Running on Linux](#running-on-linux)
     - [Running on Windows WSL](#running-on-windows-wsl)
     - [Init Script Options](#init-script-options)
+- [Examples of running the script](#examples-of-running-the-script)
+  - [Running without options](#running-without-options)
+  - [Auto accept package licenses](#auto-accept-package-licenses)
+  - [Skip already runned tasks](#skip-already-runned-tasks)
+  - [Installing only some dependencies](#installing-only-some-dependencies)
+  - [Skipping specific tasks](#skipping-specific-tasks)
+  - [A complete example](#a-complete-example)
+  - [Help](#help)
+- [Init Script Options](#init-script-options)
 
 ### Clone and give script permission
 
