@@ -2,8 +2,10 @@
 # export DOTFILES_DIR="$(cd "$(dirname "$0")" &>/dev/null && pwd)"
 local scripts_dir="$DOTFILES_DIR/scripts/zsh"
 local init_scripts_dir="$scripts_dir/init"
+
 source "$scripts_dir/init_scripts_runner.zsh"
 source "$scripts_dir/utils.zsh"
+
 add_scritps_permissions() {
   local scripts_dir="$DOTFILES_DIR/scripts/zsh"
   source "$scripts_dir/spinning_progress_bar.zsh"
@@ -25,10 +27,8 @@ add_scritps_permissions() {
 setup() {
   print_line "Starting setup ..."
   add_scritps_permissions
-  add_script_to_priorities "app" 1
-  add_script_to_priorities "node" 2
-  # add_script_to_priorities "node" 2
-
+  add_script_to_priorities "node" 1
+  add_script_to_priorities "defaults" 2
   run "$init_scripts_dir" "$@"
 }
 

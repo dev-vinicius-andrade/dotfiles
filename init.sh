@@ -8,9 +8,11 @@ sh_scripts_dir="$scripts_dir/sh"
 zsh_scripts_dir="$scripts_dir/zsh"
 echo "sh_scripts_dir: $sh_scripts_dir"
 source "$sh_scripts_dir/utils.sh"
-init() {
-    local default_packages="openssh exa git direnv neofetch"
+source "$sh_scripts_dir/package-names-override.sh"
 
+init() {
+    local default_packages=$(get_distribution_package_names_override openssh eza git direnv neofetch cmake)
+    echo "default_packages: $default_packages"
     local init_zsh_script="$zsh_scripts_dir/init.zsh"
     local os=$(uname -s)
     local aditional_args=""
@@ -18,7 +20,8 @@ init() {
     local accept_flag=""
     local skip_package_installation="false"
     local skip_update="false"
-
+    local use_homebrew_flag=""
+    declare -A package_replacements=()
     update_package_manager() {
         if [ "$skip_update" = "true" ]; then
             print_line "Skipping package manager update..."
@@ -28,7 +31,8 @@ init() {
             yes | brew update
         elif [ "$os" = "Linux" ]; then
             if [ -f /etc/debian_version ]; then
-                sudo apt update "$accept_flag"
+                #print_line "Updating package manager $accept_flag..."
+                sudo apt "$accept_flag" update
             elif [ -f /etc/arch-release ]; then
                 local pacman_accept_flag=""
                 if has_accept_flag; then
@@ -47,7 +51,8 @@ init() {
     install_package() {
         local package="$1"
         shift
-        if [ "$os" = "Darwin" ]; then
+        package=$(get_distribution_package_name_override "$package")
+        if [[ "$os" == "Darwin" || "$use_homebrew_flag" == "--use-homebrew" ]]; then
             local brew_accept_flag=""
             if has_accept_flag; then
                 yes | brew install "$package"
@@ -56,7 +61,7 @@ init() {
             fi
         elif [ "$os" = "Linux" ]; then
             if [ -f /etc/debian_version ]; then
-                sudo apt install "$accept_flag $package"
+                sudo apt "$accept_flag" install "$package"
             elif [ -f /etc/arch-release ]; then
                 local pacman_accept_flag=""
                 if has_accept_flag; then
@@ -84,9 +89,11 @@ init() {
         fi
     }
     install_brew_if_needed() {
-        if [ ! "$os" = "Darwin" ]; then
+        # Check if the OS is macOS and use_homebrew_flag is not set and different then --use-homebrew
+        if [ "$os" = "Darwin" ] && [ ! "$use_homebrew_flag" = "--use-homebrew" ]; then
             return
         fi
+
         if ! command_exists brew; then
             print_line "brew is not installed"
             if ! has_accept_flag; then
@@ -121,9 +128,7 @@ init() {
                 fi
             fi
             print_line "Installing zsh..."
-            if [ "$os" = "Darwin" ]; then
-                install_brew_if_needed
-            fi
+            install_brew_if_needed
             install_package zsh
             set_zsh_as_default_shell
         fi
@@ -137,10 +142,10 @@ init() {
                 help
                 exit 0
                 ;;
-            --skip_package_installation | -spi)
+            --skip-package-installation | -spi)
                 skip_package_installation="true"
                 ;;
-            --skip_update | -su)
+            --skip-update | -su)
                 skip_update="true"
                 ;;
             -y | --yes | -Y)
@@ -148,6 +153,9 @@ init() {
                 ;;
             --additional-packages)
                 next_is_value=1 # Flag to capture the next argument as the value
+                ;;
+            --use-homebrew)
+                use_homebrew_flag="--use-homebrew"
                 ;;
             *)
                 if [ "$next_is_value" = "1" ]; then
@@ -197,9 +205,9 @@ init() {
         }
         print_line "Options:"
         print_line "  $(print_option "--help, -h" "Show help" "false" "$option_color")"
-        print_line "  $(print_option "--skip_package_installation, -spi" "Skip package installation" "false" "$option_color")"
+        print_line "  $(print_option "--skip-package-installation, -spi" "Skip package installation" "false" "$option_color")"
         print_line "        When this flag is set, the script will not install any packages"
-        print_line "  $(print_option "--skip_update, -su" "Skip package manager update" "false" "$option_color")"
+        print_line "  $(print_option "--skip-update, -su" "Skip package manager update" "false" "$option_color")"
         print_line "        When this flag is set, the script will not update the package manager"
         print_line "  $(print_option "--yes, -y, -Y" "Accept all prompts" "false" "$option_color")"
         print_line "        When this flag is set, the script will accept all prompts of the package manager"
@@ -207,6 +215,8 @@ init() {
         print_line "        Additional packages to install separated by space"
         print_line "  $(print_option "--skip" "Skip all scripts that have already been run" "false" "$option_color")"
         print_line "        When this flag is set, the script will skip all the scripts that have already been run in dotfiles/scripts/zsh/init folder"
+        print_line "  $(print_option "--use-homebrew" "It will force using homebrew as a package manager for all linux distributions" "false" "$option_color")"
+        print_line "        As default, the script will use the package manager of the OS, but with this flag, it will use homebrew."
 
         local init_scripts_dir="$zsh_scripts_dir/init"
         local total_files=$(find "$init_scripts_dir" -type f | wc -l)
@@ -234,6 +244,7 @@ init() {
         fi
         install_package "$package"
     }
+
     install_rust_and_cargo() {
         if [ "$skip_package_installation" = "true" ]; then
             print_line "Skipping rust and cargo installation..."
@@ -244,18 +255,19 @@ init() {
             return
         fi
         print_line "Installing rust and cargo..."
-        sudo curl https://sh.rustup.rs -sSf | sh
+        sudo curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
     }
     install_packages() {
         if [ "$skip_package_installation" = "true" ]; then
             print_line "Skipping package installation..."
             return
         fi
+        local DISTRO=$(lsb_release -i -s)
         local packages="$default_packages$additional_packages"
-        if [ $os = "Linux" ]; then
+
+        if [ $os = "Linux" ] && [ "$use_homebrew_flag" != "--use-homebrew" ]; then
             packages="$packages lsb-release"
             install_rust_and_cargo
-            return
         fi
         print_line "Installing packages: $packages"
         if ! has_accept_flag; then
@@ -267,6 +279,7 @@ init() {
             fi
         fi
         print_line "Installing packages..."
+        print_line "Packages: $packages"
         for package in $packages; do
             install_package "$package"
         done
@@ -279,15 +292,26 @@ init() {
         print_line "Running init zsh script$additional_args..."
         print_line "Running: /bin/zsh -c \"$init_zsh_script $additional_args\""
 
-        /bin/zsh -c "$init_zsh_script $additional_args"
+        /bin/zsh -c "$init_zsh_script $additional_args $use_homebrew_flag"
     }
+    run_zsh() {
+        # Check if zsh is installed
+        if ! command -v zsh >/dev/null 2>&1; then
+            echo "zsh is not installed. Please install zsh first."
+            return 1
+        fi
+
+        source "$HOME/.zshrc"
+    }
+
     install() {
         parse_args "$@"
         update_package_manager
-        install_zsh_if_needed
         install_packages
+        install_zsh_if_needed
         install_golang
         run_init_zsh_script
+        run_zsh
     }
     print_line "OS: $os"
     print_line "DOTFILES_DIR: $DOTFILES_DIR"

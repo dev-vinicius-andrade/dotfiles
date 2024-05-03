@@ -1,5 +1,34 @@
 #! /bin/zsh
 source "$DOTFILES_DIR/scripts/zsh/spinning_progress_bar.zsh"
+command_exists() {
+    command -v "$1" &>/dev/null
+}
+is_distro() {
+    local distro="$1"
+    local current_distro=$(get_distro)
+    if [ "$current_distro" = "$distro" ]; then
+        return 0
+    fi
+    return 1
+}
+get_distro() {
+    local distro=""
+    ## get using lsb_release
+    if command -v lsb_release &>/dev/null; then
+        distro=$(lsb_release -si)
+    else
+        ## get using /etc/os-release
+        if [ -f /etc/os-release ]; then
+            distro=$(awk -F= '/^ID=/{print $2}' /etc/os-release | tr -d '"')
+        else
+            ## get using /etc/issue
+            if [ -f /etc/issue ]; then
+                distro=$(cat /etc/issue | cut -d " " -f 1)
+            fi
+        fi
+    fi
+    echo "$distro"
+}
 get_host_environment_information() {
     local is_wsl="false"
     local host_home="$HOME"
@@ -48,7 +77,113 @@ print_section_end() {
     [[ $(((name_length + 2 + 2 * dash_length) % 2)) -ne 0 ]] && echo -n "-"
     echo
 }
+# get_argument() {
+#     local args=("$@")
+#     local identifier="${args[-2]}"
+#     local default_value="${args[-1]}"
+#     local value_found=""
+#     print_line "Identifier: $identifier"
+#     # Check if the identifier is a number (digit only check)
+#     if [[ "$identifier" =~ ^-?[0-9]+$ ]]; then
+#         # Identifier is a number, treat as positional index
+#         local index=$((identifier - 1)) # Adjust for 0-based indexing in zsh arrays
 
+#         # Safe check for index bounds - ensure no spaces in arithmetic expressions
+#         if ((index >= 0 && index < ${#args} - 2)); then
+#             value_found="${args[index]}"
+#         fi
+#     else
+#         print_line "TAA AQUI"
+#         # Treat as a name of the argument
+#         local next=false
+#         print_line "TAA AQUI2"
+#         for arg in "${args[1, -3]}"; do # Slicing to ignore the last two elements
+#             print_line "TAA AQUI3 $arg"
+#             if [[ "$next" == true ]]; then
+#                 value_found="$arg"
+#                 break
+#             fi
+
+#             if [[ "$arg" == "$identifier" || "$arg" == "${identifier#-}" ]]; then
+#                 next=true
+#             elif [[ "$arg" =~ ^${identifier#=}=(.*) ]]; then
+#                 value_found="$match[1]"
+#                 break
+#             fi
+#         done
+#     fi
+
+#     if [[ -z "$value_found" ]]; then
+#         echo "$default_value"
+#     else
+#         echo "$value_found"
+#     fi
+# }
+# Function to fetch an argument's value, return the argument itself, or check for its existence
+get_argument() {
+    # Adjust the way to fetch parameters to leave space for an optional one
+    local default_value="${@: -1}"          # Always the last
+    local identifier="${@: -2:1}"           # Second to last
+    local args=("${@:1:$#-2}")              # All arguments except the last two
+
+    # Return type is optionally the third from the end, default to 'return_flag_name' if not specified
+    local return_type="${@[-3]}"
+    if [[ "$return_type" != "return_flag_name" && "$return_type" != "return_boolean" && "$return_type" != "return_value" ]]; then
+        # If the third from the last is not a valid return type, consider it as part of args
+        return_type="return_flag_name"
+        args=("${@:1:$#-2}")  # Include what was assumed to be return_type in args
+        identifier="${@: -2:1}" # Adjust identifier
+        default_value="${@: -1:1}" # Adjust default_value
+    fi
+
+    local value_found=""
+    local is_flag_present=false
+
+    # Handle positional index requests
+    if [[ "$identifier" =~ ^-?[0-9]+$ ]]; then
+        local index=$((identifier))
+        if ((index > 0 && index <= ${#args[@]})); then
+            value_found="${args[index]}"
+            ((index < ${#args[@]} && "${args[index+1]}" != -*)) && value_found="${args[index+1]}"
+        fi
+    else
+        # Parse arguments looking for flags or key=value pairs
+        local next_is_value=false
+        for arg in "${args[@]}"; do
+            if $next_is_value; then
+                value_found="$arg"
+                break
+            fi
+
+            if [[ "$arg" == "$identifier" ]]; then
+                is_flag_present=true
+                next_is_value=true
+                [[ "$return_type" == "return_boolean" ]] && break
+            elif [[ "$arg" == "$identifier="* ]]; then
+                value_found="${arg#*=}"
+                is_flag_present=true
+                break
+            fi
+        done
+    fi
+
+    # Handle return types based on what was found
+    case "$return_type" in
+        "return_flag_name")
+            [[ "$is_flag_present" == true ]] && echo "$identifier" || echo "$default_value"
+            ;;
+        "return_boolean")
+            [[ "$is_flag_present" == true ]] && echo "true" || echo "false"
+            ;;
+        "return_value")
+            [[ -n "$value_found" ]] && echo "$value_found" || echo "$default_value"
+            ;;
+        *)
+            echo "Error: Invalid return type specified."
+            return 1
+            ;;
+    esac
+}
 create_symbolic_link() {
     local source="$1"
     local target="$2"

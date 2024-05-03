@@ -1,7 +1,11 @@
 #! /bin/zsh
 source "$DOTFILES_DIR/scripts/zsh/utils.zsh"
+if [[ -f "$HOME/.zshrc" ]]; then
+  source "$HOME/.zshrc"
+  initialize_zsh_environment --sprint-scripts-loaded=false --clear-terminal-on-load=false
+fi
 install_tmux_if_not_exists() {
-  if ! command -v tmux &> /dev/null; then
+  if ! command -v tmux &>/dev/null; then
     source "$DOTFILES_DIR/scripts/zsh/package_installer.zsh"
     local os=$(uname -s)
     printf "\n tmux not found, installing..."
@@ -17,7 +21,7 @@ install_tmux_if_not_exists() {
     printf "\n tmux already installed, skipping..."
   fi
 }
-create_tmux_config_extra_symbolic_link(){
+create_tmux_config_extra_symbolic_link() {
   local skip="$1"
   local file_name="$2"
   local dir="$DOTFILES_DIR"
@@ -27,7 +31,7 @@ create_tmux_config_extra_symbolic_link(){
   create_symbolic_link "$source_file" "$target_file" "$skip"
   print_section_end
 }
-create_tmux_config_extras(){
+create_tmux_config_extras() {
   local skip="$1"
   local dir="$DOTFILES_DIR"
   print_section_start "Tmux config extras"
@@ -48,6 +52,9 @@ create_tmux_config_symbolic_link() {
   create_symbolic_link "$source_file" "$target_file" "$skip"
   print_section_end
 }
+local use_homebrew_flag=$(get_argument "$@" "--use-homebrew" "")
+print_line "Tmux using homebrew: $use_homebrew_flag"
+return
 install_tmux_if_not_exists
 create_tmux_config_symbolic_link "$1"
 create_tmux_config_extras "$1"

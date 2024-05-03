@@ -1,5 +1,8 @@
 #! /bin/zsh
-
+if [[ -f "$HOME/.zshrc" ]]; then
+  source "$HOME/.zshrc"
+  initialize_zsh_environment --sprint-scripts-loaded=false --clear-terminal-on-load=false
+fi
 install_packages() {
   source "$DOTFILES_DIR/scripts/zsh/package_installer.zsh"
   install_package "neovim"
@@ -24,7 +27,9 @@ create_neovim_symbolic_links() {
   create_symbolic_link "$nvim_source_dir/lazy-lock.json" "$nvim_target_dir/lazy-lock.json" "$skip"
   print_section_end
 }
-
+local use_homebrew_flag=$(get_argument "$@" "--use-homebrew" "")
+print_line "Nvim using homebrew: $use_homebrew_flag"
+return
 if [[ "$1" = "--skip" ]]; then
   install_packages "--skip"
   create_neovim_symbolic_links "--skip"

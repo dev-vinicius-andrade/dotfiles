@@ -18,3 +18,16 @@ export repos="$HOME/Development/repos/"
 export PATH="$PATH:$HOME/.dotnet/tools:$HOME/.local/bin"
 export APPDATA="$HOME"
 export PYTHON=/usr/bin/python3
+if [ -d "$HOME/.dotnet/tools" ]; then
+  export PATH="$HOME/.dotnet/tools:$PATH"
+fi
+if [ -d "$HOME/.cargo/bin" ]; then
+  export PATH="$HOME/.cargo/bin:$PATH"
+fi
+
+if [ -d "$HOME/.local/bin" ]; then
+  export PATH="$HOME/.local/bin:$PATH"
+fi
+if [ -d "/home/linuxbrew/.linuxbrew" ]; then
+  export PATH="/home/linuxbrew/.linuxbrew:$PATH"
+fi

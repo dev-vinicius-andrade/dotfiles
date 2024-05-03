@@ -234,22 +234,22 @@ As the code can be updated, make it's more reliable to check the available optio
 - **--skip-<name_of_init_script>** :  You set the skip flag for the individual scripts if needed.
 
 - **--<name_of_init_script>** : Run only the specified init script
-- **--skip_package_installation** : Skip the package manager installation
-- **--skip_update** : Skip the package manager update and upgrade
+- **--skip-package-installation** | **-spi** : Skip the package manager installation
+- **--skip-update** | **-su** : Skip the package manager update and upgrade
 - **--additional-packages** : Install additional that are not in the package manager
 - **--help** : Will print the available options to run the script
 
 ## Project structure
 
-- [**init.sh**](https://github.com/dev-vinicius-andrade/dotfiles/init.sh)     Script to install all dependencies and set up the environment
-- [**.zshrc**](https://github.com/dev-vinicius-andrade/dotfiles/.zshrc)       Zsh configuration file
-- [**.zshenv**](https://github.com/dev-vinicius-andrade/dotfiles/.zshenv)     Zsh Public environment variables
-- [**alacritty**](https://github.com/dev-vinicius-andrade/dotfiles/alacritty) Alacritty configuration files and themes
-- [**nushell**](https://github.com/dev-vinicius-andrade/dotfiles/)            Nushell configuration files
-- [**nvim**](https://github.com/dev-vinicius-andrade/dotfiles/)               Neovim configuration files/plugins
-- [**starship**](https://github.com/dev-vinicius-andrade/dotfiles/)           Starship configuration files
-- [**tmux**](https://github.com/dev-vinicius-andrade/dotfiles/)               Tmux configuration files
-- [**zsh**](https://github.com/dev-vinicius-andrade/dotfiles/)                Zsh configuration files
-- [**scripts**](https://github.com/dev-vinicius-andrade/dotfiles/)            Scripts to automate the environment setup
-- [**wezterm**](https://github.com/dev-vinicius-andrade/dotfiles/)            Wezterm configuration files
-- [**nushell**](https://github.com/dev-vinicius-andrade/dotfiles/)            Nushell configuration files
+- [**init.sh**](https://github.com/dev-vinicius-andrade/dotfiles/blob/main/init.sh)             Script to install all dependencies and set up the environment
+- [**.zshrc**](https://github.com/dev-vinicius-andrade/dotfiles/blob/main/.zshrc)               Zsh configuration file
+- [**.zshenv**](https://github.com/dev-vinicius-andrade/dotfiles/blob/main/.zshenv)             Zsh Public environment variables
+- [**alacritty**](https://github.com/dev-vinicius-andrade/dotfiles/tree/main/alacritty)         Alacritty configuration files and themes
+- [**nushell**](https://github.com/dev-vinicius-andrade/dotfiles/tree/main/nushell)             Nushell configuration files
+- [**nvim**](https://github.com/dev-vinicius-andrade/dotfiles/tree/main/nvim)                   Neovim configuration files/plugins
+- [**starship**](https://github.com/dev-vinicius-andrade/dotfiles/tree/main/starship)           Starship configuration files
+- [**tmux**](https://github.com/dev-vinicius-andrade/dotfiles/tree/main/tmux)                   Tmux configuration files
+- [**zsh**](https://github.com/dev-vinicius-andrade/dotfiles/tree/main/zsh)                     Zsh configuration files
+- [**scripts**](https://github.com/dev-vinicius-andrade/dotfiles/tree/main/scripts)             Scripts to automate the environment setup
+- [**wezterm**](https://github.com/dev-vinicius-andrade/dotfiles/tree/main/wezterm)             Wezterm configuration files
+- [**nushell**](https://github.com/dev-vinicius-andrade/dotfiles/tree/main/nushell)             Nushell configuration files

@@ -1,5 +1,9 @@
 #! /bin/zsh
 source "$DOTFILES_DIR/scripts/zsh/utils.zsh"
+if [[ -f "$HOME/.zshrc" ]]; then
+    source "$HOME/.zshrc"
+    initialize_zsh_environment --sprint-scripts-loaded=false --clear-terminal-on-load=false
+fi
 # create_wezterm_config_directory() {
 #     read is_wsl host_home < <(get_host_environment_information)
 #     local wezterm_config_dir="$host_home/.config/wezterm"
@@ -36,7 +40,9 @@ setup() {
     create_wezterm_lua_file_symbolic_link "$skip"
     create_wezterm_lua_config_files_dir_symbolic_link "$skip"
 }
-
+local use_homebrew_flag=$(get_argument "$@" "--use-homebrew" "")
+print_line "Wezterm using homebrew: $use_homebrew_flag"
+return
 if [[ "$1" = "--skip" ]]; then
     setup "--skip"
 else

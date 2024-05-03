@@ -22,6 +22,7 @@ run() {
     local run_all_scripts_flag="false"
     local skip_flatpak="N" # Assume N as default skip unless specified
     local skip_snap="N"    # Assume Y as default skip unless specified
+    local use_homebrew_flag=""
     load_scripts() {
         print_line "Loading scripts..."
         for script in $init_scripts_dir/*.zsh; do
@@ -52,14 +53,11 @@ run() {
             print_line "Script $script_path does not exist or is not executable, skipping..."
             return
         fi
-        report_progress "$current_script" "$total_scripts" "Running script $script_path with skip flag $skip_flag..."
-        if [[ "$script" = "app" ]]; then
-            print_line "Running app script with skip_flatpak:$skip_flatpak skip_snap:$skip_snap ..."
-            "$script_path" "$skip_flag" "$skip_flatpak" "$skip_snap"
-        else
-            "$script_path" "$skip_flag"
-        fi
-        
+        print_line "HOMEBREEEEEEEEEEEEEEEEW2: $use_homebrew_flag"
+        print_line "Running script $script_path with skip flag $skip_flag and $use_homebrew_flag..."
+        #report_progress "$current_script" "$total_scripts" "Running script $script_path with skip flag $skip_flag and $use_homebrew_flag..."
+        # /bin/zsh -c "$script_path $skip_flag $use_homebrew_flag"
+        "$script_path" "$skip_flag" "$use_homebrew_flag"
     }
     init_run_all_scripts_flag() {
         if ((${#@} == 0)); then
@@ -110,14 +108,11 @@ run() {
             --skip)
                 set_global_skip_flag_from_arg --skip
                 ;;
-            --skip-snap)
-                 skip_snap="Y"
-                ;;
-            --skip-flatpak)
-                skip_flatpak="Y"
-                ;;
             --skip-*)
                 set_skiped_script_from_arg "$arg"
+                ;;
+            --use-homebrew)
+                use_homebrew_flag="--use-homebrew"
                 ;;
             *)
                 handle_extra_arg "$arg"
@@ -219,6 +214,7 @@ run() {
         print_line "Total scripts: ${#scripts[@]}"
         local total_scripts="${#scripts[@]}"
         local current_script=1
+        
         while [[ "$current_script" -le "$total_scripts" ]]; do
             for script priority in "${(@kv)scripts}"; do
                 script="${script//\"/}"
@@ -237,16 +233,16 @@ run() {
         shift # remove the first argument which is the init_scripts_dir
         load_scripts
         parse_args "$@"
-        if has_specific_scripts; then
-            run_specific_scripts
-            print_line "Finished setup ..."
-            return
-        fi
         
-        if has_priorities; then
-            reorder_scripts
-        fi
-        run_scripts
+         if has_specific_scripts; then
+             run_specific_scripts
+             print_line "Finished setup ..."
+             return
+         fi
+         if has_priorities; then
+             reorder_scripts
+         fi
+         run_scripts
     }
     process "$@"
 }

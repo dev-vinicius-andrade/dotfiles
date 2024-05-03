@@ -1,7 +1,10 @@
 #! /bin/zsh
 source "$DOTFILES_DIR/scripts/zsh/utils.zsh"
-download_and_install_fonts()
-{
+if [[ -f "$HOME/.zshrc" ]]; then
+    source "$HOME/.zshrc"
+    initialize_zsh_environment --sprint-scripts-loaded=false --clear-terminal-on-load=false
+fi
+download_and_install_fonts() {
     source "$DOTFILES_DIR/scripts/zsh/spinning_progress_bar.zsh"
     source "$DOTFILES_DIR/scripts/zsh/package_installer.zsh"
     install_package "unzip"
@@ -20,13 +23,18 @@ download_and_install_fonts()
     )
     local total_fonts=${#fonts_zips_uris[@]}
     local current_file=1
-    for fonts_zip_uri in "${fonts_zips_uris[@]}"
-    do
+    for fonts_zip_uri in "${fonts_zips_uris[@]}"; do
         local message="[-] Downloading font: $fonts_zip_uri"
         report_progress "$current_file" "$total_fonts" "$message"
-        wget -q -O tmpFont.zip "${fonts_zip_uri}" || { echo "Failed to download $fonts_zip_uri"; continue; }
+        wget -q -O tmpFont.zip "${fonts_zip_uri}" || {
+            echo "Failed to download $fonts_zip_uri"
+            continue
+        }
         echo "Attempting to unzip tmpFont.zip..."
-        unzip -o -q tmpFont.zip -d ~/.fonts || { echo "Failed to unzip tmpFont.zip"; continue; }
+        unzip -o -q tmpFont.zip -d ~/.fonts || {
+            echo "Failed to unzip tmpFont.zip"
+            continue
+        }
         echo "Successfully unzipped tmpFont.zip"
         rm tmpFont.zip
         current_file=$((current_file + 1))
@@ -49,8 +57,7 @@ download_and_install_fonts()
         exit 1
     fi
 }
-install_nerd_fonts()
-{
+install_nerd_fonts() {
 
     local skip="${1:---no-skip}"
     print_section_start "Nerd Fonts"
@@ -68,19 +75,16 @@ install_nerd_fonts()
             if [ "$answer" = "y" ]; then
                 download_and_install_fonts
             else
-              echo "[-] Skipping fonts download: [-]"
+                echo "[-] Skipping fonts download: [-]"
             fi
         fi
     fi
     print_section_end
 }
+local use_homebrew_flag=$(get_argument "$@" "--use-homebrew" "")
+return
 if [[ "$1" = "--skip" ]]; then
     install_nerd_fonts "--skip"
 else
     install_nerd_fonts
 fi
-
-
-
-
-

@@ -1,13 +1,17 @@
 #! /bin/zsh
 source "$DOTFILES_DIR/scripts/zsh/package_installer.zsh"
 source "$DOTFILES_DIR/scripts/zsh/utils.zsh"
-install_packages(){
+if [[ -f "$HOME/.zshrc" ]]; then
+    source "$HOME/.zshrc"
+    initialize_zsh_environment --sprint-scripts-loaded=false --clear-terminal-on-load=false
+fi
+install_packages() {
     print_section_start "Nushell"
     print_section_description "Check and install nushell"
     install_package "nushell"
     print_section_end
 }
-create_symbolic_links(){
+create_symbolic_links() {
     local skip="${1:---no-skip}"
     print_section_start "Nushell symbolic links"
     local nushell_dir="$HOME/.config/nushell"
@@ -20,6 +24,9 @@ create_symbolic_links(){
     create_symbolic_link "$nushell_source_dir/env.nu" "$nushell_target_dir/env.nu" "$skip"
     print_section_end
 }
+local use_homebrew_flag=$(get_argument "$@" "--use-homebrew" "")
+print_line "Nushell using homebrew: $use_homebrew_flag"
+return
 install_packages
 if [[ "$1" = "--skip" ]]; then
     create_symbolic_links "--skip"
