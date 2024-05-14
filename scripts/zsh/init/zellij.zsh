@@ -5,6 +5,8 @@ if [[ -f "$HOME/.zshrc" ]]; then
     source "$HOME/.zshrc"
     initialize_zsh_environment --sprint-scripts-loaded=false --clear-terminal-on-load=false
 fi
+local use_homebrew_flag=$(get_argument "$@" "--use-homebrew" ""),
+print_line "Zellij using homebrew: $use_homebrew_flag"
 run() {
 
     local zellij_versions_dir="$HOME/.zellij/versions"
@@ -25,7 +27,7 @@ run() {
             print_line "zellij is already installed"
             return
         fi
-        install_package "zellij"
+        install_package "zellij" "$use_homebrew_flag"
     }
     print_section_start "Zellij"
     if [[ "$1" = "--skip" ]]; then
@@ -35,7 +37,5 @@ run() {
     fi
     print_section_end "Zellij"
 }
-local use_homebrew_flag=$(get_argument "$@" "--use-homebrew" ""),
-print_line "Zellij using homebrew: $use_homebrew_flag"
-return
+
 run "$@"

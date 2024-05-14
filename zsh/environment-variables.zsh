@@ -28,6 +28,6 @@ fi
 if [ -d "$HOME/.local/bin" ]; then
   export PATH="$HOME/.local/bin:$PATH"
 fi
-if [ -d "/home/linuxbrew/.linuxbrew" ]; then
-  export PATH="/home/linuxbrew/.linuxbrew:$PATH"
+if [ -d "/home/linuxbrew/.linuxbrew/bin" ]; then
+  export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 fi

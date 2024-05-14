@@ -13,5 +13,4 @@ install_packages() {
     install_package "npm" "$use_homebrew_flag"
     sudo npm install -g n
 }
-print_line "NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOODEEEEEEEEEEEEEEEEEEE______________________________________________"
 install_packages

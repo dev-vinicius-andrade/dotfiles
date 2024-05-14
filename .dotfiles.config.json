@@ -1,0 +1,34 @@
+{
+  "preRequisites": [],
+  "os": {
+    "packageManagers": {
+      "windows": {},
+      "linux": {
+        "apt": {
+          "command": "apt-get",
+          "commands": {
+            "install": {
+              "command": "install",
+              "nonInteractiveCommand": "install -y"
+            }
+          }
+        }
+      },
+      "darwin": {}
+    }
+  },
+  "packages": {
+    "go": {
+      "debian": {
+        "name": "golang",
+        "version": "latest",
+        "source": null
+        // "options": {
+        //   "preferences": {
+        //     "packageManager": "brew"
+        //   }
+        // }
+      }
+    }
+  }
+}

@@ -4,6 +4,8 @@ if [[ -f "$HOME/.zshrc" ]]; then
   source "$HOME/.zshrc"
   initialize_zsh_environment --sprint-scripts-loaded=false --clear-terminal-on-load=false
 fi
+local use_homebrew_flag=$(get_argument "$@" "--use-homebrew" "")
+print_line "Tmux using homebrew: $use_homebrew_flag"
 install_tmux_if_not_exists() {
   if ! command -v tmux &>/dev/null; then
     source "$DOTFILES_DIR/scripts/zsh/package_installer.zsh"
@@ -11,8 +13,8 @@ install_tmux_if_not_exists() {
     printf "\n tmux not found, installing..."
     install_package "tmux"
     if [ "$os" = "Darwin" ]; then
-      install_package "tpm"
-      install_package "reattach-to-user-namespace"
+      install_package "tpm" "$use_homebrew_flag"
+      install_package "reattach-to-user-namespace" "$use_homebrew_flag"
     elif [ "$os" = "Linux" ]; then
       install_package "xclip"
       git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
@@ -52,9 +54,7 @@ create_tmux_config_symbolic_link() {
   create_symbolic_link "$source_file" "$target_file" "$skip"
   print_section_end
 }
-local use_homebrew_flag=$(get_argument "$@" "--use-homebrew" "")
-print_line "Tmux using homebrew: $use_homebrew_flag"
-return
+
 install_tmux_if_not_exists
 create_tmux_config_symbolic_link "$1"
 create_tmux_config_extras "$1"

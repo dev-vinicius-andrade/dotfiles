@@ -8,14 +8,247 @@
     "version": "0.2.0",
     "configurations": [
       {
-        "name": "Debug zsh",
-        "type": "zshdb",
+        "name": "Build Go For Windows",
+        "type": "node-terminal",
         "request": "launch",
-        "program": "~/dotfiles/init.zsh",
-        "cwd": "~/dotfiles"
+        "command": "echo 'Building ${workspaceFolder}/.bin/dotfiles .' ...",
+        "preLaunchTask": "build:go:dotfiles:orchestrator:windows",
+        "env": {
+          "GOOS": "windows",
+          "GOARCH": "amd64"
+        }
+      },
+      {
+        "name": "Build Go For Linux",
+        "type": "node-terminal",
+        "request": "launch",
+        "command": "echo 'Building ${workspaceFolder}/.bin/dotfiles .' ...",
+        "preLaunchTask": "build:go:dotfiles:orchestrator:linux",
+        "env": {
+          "GOOS": "linux",
+          "GOARCH": "amd64"
+        }
+      },
+      {
+        "name": "Build Go For MacOS",
+        "type": "node-terminal",
+        "request": "launch",
+        "command": "echo 'Building ${workspaceFolder}/.bin/dotfiles .' ...",
+        "preLaunchTask": "build:go:dotfiles:orchestrator:macos",
+        "env": {
+          "GOOS": "darwin",
+          "GOARCH": "amd64"
+        }
+      }
+    ]
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      // LINUX
+      {
+        "label": "build:go:dotfiles:linux",
+        "options": {
+          "cwd": "${workspaceFolder}/scripts/go/srcs/dotfiles"
+        },
+        "windows": {
+          "command": "go",
+          "options": {
+            "env": {
+              "GOOS": "linux",
+              "GOARCH": "amd64"
+            }
+          },
+          "args": [
+            "build",
+            "-o",
+            "${workspaceFolder}/.bin/dotfiles/linux/dotfiles.exe",
+            "."
+          ]
+        },
+        "linux": {
+          "command": "go",
+          "options": {
+            "env": {
+              "GOOS": "linux",
+              "GOARCH": "amd64"
+            }
+          },
+          "args": [
+            "build",
+            "-o",
+            "${workspaceFolder}/.bin/dotfiles/linux/dotfiles",
+            "."
+          ]
+        },
+        "osx": {
+          "command": "go",
+          "options": {
+            "env": {
+              "GOOS": "linux",
+              "GOARCH": "amd64"
+            }
+          },
+          "args": [
+            "build",
+            "-o",
+            "${workspaceFolder}/.bin/dotfiles/linux/dotfiles",
+            "."
+          ]
+        },
+        "type": "shell",
+        "problemMatcher": ["$go"],
+        "presentation": {
+          "reveal": "always",
+          "close": true
+        },
+        "group": "build"
+      },
+      {
+        "label": "build:go:dotfiles:orchestrator:linux",
+        "type": "shell",
+        "command": "echo 'Done!' & ${input:killBuildGoDotfiles}",
+        "dependsOn": ["build:go:dotfiles:linux"]
+      },
+      // WINDOWS
+      {
+        "label": "build:go:dotfiles:windows",
+        "options": {
+          "cwd": "${workspaceFolder}/scripts/go/srcs/dotfiles"
+        },
+        "windows": {
+          "command": "go",
+          "options": {
+            "env": {
+              "GOOS": "windows",
+              "GOARCH": "amd64"
+            }
+          },
+          "args": [
+            "build",
+            "-o",
+            "${workspaceFolder}/.bin/dotfiles/windows/dotfiles.exe",
+            "."
+          ]
+        },
+        "linux": {
+          "command": "go",
+          "options": {
+            "env": {
+              "GOOS": "windows",
+              "GOARCH": "amd64"
+            }
+          },
+          "args": [
+            "build",
+            "-o",
+            "${workspaceFolder}/.bin/dotfiles/windows/dotfiles",
+            "."
+          ]
+        },
+        "osx": {
+          "command": "go",
+          "options": {
+            "env": {
+              "GOOS": "windows",
+              "GOARCH": "amd64"
+            }
+          },
+          "args": [
+            "build",
+            "-o",
+            "${workspaceFolder}/.bin/dotfiles/windows/dotfiles",
+            "."
+          ]
+        },
+        "type": "shell",
+        "problemMatcher": ["$go"],
+        "presentation": {
+          "reveal": "always",
+          "close": true
+        },
+        "group": "build"
+      },
+      {
+        "label": "build:go:dotfiles:orchestrator:windows",
+        "type": "shell",
+        "command": "echo 'Done!' & ${input:killBuildGoDotfiles}",
+        "dependsOn": ["build:go:dotfiles:linux"]
+      },
+      // MACOS
+      {
+        "label": "build:go:dotfiles:macos",
+        "options": {
+          "cwd": "${workspaceFolder}/scripts/go/srcs/dotfiles"
+        },
+        "windows": {
+          "command": "go",
+          "options": {
+            "env": {
+              "GOOS": "darwin",
+              "GOARCH": "amd64"
+            }
+          },
+          "args": [
+            "build",
+            "-o",
+            "${workspaceFolder}/.bin/dotfiles/macos/dotfiles.exe",
+            "."
+          ]
+        },
+        "linux": {
+          "command": "go",
+          "options": {
+            "env": {
+              "GOOS": "darwin",
+              "GOARCH": "amd64"
+            }
+          },
+          "args": [
+            "build",
+            "-o",
+            "${workspaceFolder}/.bin/dotfiles/macos/dotfiles",
+            "."
+          ]
+        },
+        "osx": {
+          "command": "go",
+          "options": {
+            "env": {
+              "GOOS": "darwin",
+              "GOARCH": "amd64"
+            }
+          },
+          "args": [
+            "build",
+            "-o",
+            "${workspaceFolder}/.bin/dotfiles/macos/dotfiles",
+            "."
+          ]
+        },
+        "type": "shell",
+        "command": "echo 'Building ${workspaceFolder}/.bin/dotfiles .' ...",
+        "problemMatcher": ["$go"],
+        "presentation": {
+          "reveal": "always",
+          "close": true
+        },
+        "group": "build"
+      },
+      {
+        "label": "build:go:dotfiles:orchestrator:macos",
+        "type": "shell",
+        "command": "echo 'Done!' & ${input:killBuildGoDotfiles}",
+        "dependsOn": ["build:go:dotfiles:linux"]
       }
     ],
-    "compounds": []
+    "inputs": [
+      {
+        "type": "command",
+        "id": "killBuildGoDotfiles",
+        "command": "workbench.action.debug.disconnect"
+      }
+    ]
   },
   "settings": {
     "editor.fontFamily": "JetBrainsMono Nerd Font, Hack Nerd Font"
