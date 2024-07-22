@@ -42,3 +42,8 @@ ln -sn "$(wslpath $(cmd.exe /C "echo %USERPROFILE%" 2>/dev/null) | tr -d '\r')/d
 chmod +x ~/dotfiles/init.sh && \
 ~/dotfiles/init.sh -y --use-homebrew
 ```
+
+
+ln -sn /mnt/f/repos/github/dev-vinicius-andrade/dotfiles ~/dotfiles && \
+chmod +x ~/dotfiles/cli/.bin/$ARCH(386 or amd64)/$DISTRO/dotfiles && \
+~/dotfiles/cli/.bin/$ARCH(386 or amd64)/$DISTRO/dotfiles
