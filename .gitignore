@@ -3,4 +3,4 @@ tmpFont.zip
 tmpFont.zip
 .secrets
 **/.bin
-nvim/nvim-mson-languages-to-install.json
+nvim/nvim-mason-install-configuration.json
