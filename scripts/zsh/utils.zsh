@@ -77,48 +77,7 @@ print_section_end() {
     [[ $(((name_length + 2 + 2 * dash_length) % 2)) -ne 0 ]] && echo -n "-"
     echo
 }
-# get_argument() {
-#     local args=("$@")
-#     local identifier="${args[-2]}"
-#     local default_value="${args[-1]}"
-#     local value_found=""
-#     print_line "Identifier: $identifier"
-#     # Check if the identifier is a number (digit only check)
-#     if [[ "$identifier" =~ ^-?[0-9]+$ ]]; then
-#         # Identifier is a number, treat as positional index
-#         local index=$((identifier - 1)) # Adjust for 0-based indexing in zsh arrays
-
-#         # Safe check for index bounds - ensure no spaces in arithmetic expressions
-#         if ((index >= 0 && index < ${#args} - 2)); then
-#             value_found="${args[index]}"
-#         fi
-#     else
-#         print_line "TAA AQUI"
-#         # Treat as a name of the argument
-#         local next=false
-#         print_line "TAA AQUI2"
-#         for arg in "${args[1, -3]}"; do # Slicing to ignore the last two elements
-#             print_line "TAA AQUI3 $arg"
-#             if [[ "$next" == true ]]; then
-#                 value_found="$arg"
-#                 break
-#             fi
-
-#             if [[ "$arg" == "$identifier" || "$arg" == "${identifier#-}" ]]; then
-#                 next=true
-#             elif [[ "$arg" =~ ^${identifier#=}=(.*) ]]; then
-#                 value_found="$match[1]"
-#                 break
-#             fi
-#         done
-#     fi
-
-#     if [[ -z "$value_found" ]]; then
-#         echo "$default_value"
-#     else
-#         echo "$value_found"
-#     fi
-# }
+# 
 # Function to fetch an argument's value, return the argument itself, or check for its existence
 get_argument() {
     # Adjust the way to fetch parameters to leave space for an optional one

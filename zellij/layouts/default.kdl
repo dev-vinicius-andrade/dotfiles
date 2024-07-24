@@ -1,0 +1,123 @@
+layout {
+ default_tab_template{
+   pane size=1 borderless=true  {
+     plugin location="https://github.com/dj95/zjstatus/releases/latest/download/zjstatus.wasm" {
+          //COLORS
+          color_default_bg "#181926"
+          color_header_bg "#181926"
+          color_header_fg "#494d64"
+          // MODE_COLORS  
+          color_mode_fg "#181926"
+          color_mode_normal_bg "#a6da95"
+          color_mode_normal_icon_bg "#181926"
+          color_mode_normal_icon_fg "#a6da95"
+
+          color_mode_locked_bg "#6e738d"
+          color_mode_locked_icon_bg "#181926"
+          color_mode_locked_icon_fg "#6e738d"
+
+          color_mode_default_bg "#8aadf4" 
+          color_mode_default_icon_fg  "#8aadf4" 
+          color_mode_default_icon_bg  "#181926"
+
+
+          color_mode_tmux_bg "#f5a97f" 
+          color_mode_tmux_icon_bg  "#181926" 
+          color_mode_tmux_icon_fg  "#f5a97f"
+
+          //TAB_COLORS
+          color_tab_separator_bg "#181926"
+
+          color_tab_normal_bg "#181926"
+          color_tab_normal_fg "#232633"
+          color_tab_normal_icon_bg "#232633"
+          color_tab_normal_icon_fg "#181926"
+          color_tab_normal_index_bg "#232633"
+          color_tab_normal_index_fg "#474949"
+          color_tab_normal_icon_end_bg "#181926"
+          color_tab_normal_icon_end_fg "#232633"
+          color_tab_normal_tab_name_bg "#232633"
+          color_tab_normal_tab_name_fg "#474949"
+
+          color_tab_active_bg "#181926"
+          color_tab_active_fg "#eed49f"
+          color_tab_active_icon_bg "#eed49f"
+          color_tab_active_icon_fg "#1e2030"
+          color_tab_active_icon_end_bg "#181926"
+          color_tab_active_icon_end_fg "#363a4f"
+          color_tab_active_tab_name_bg "#363a4f"
+          color_tab_active_tab_name_fg "#eed49f"
+          // DateTime
+          color_datetime_fg "#6C7086"
+          
+
+
+
+          color_border_default_fg "#6c7086"
+          
+
+          format_left   "{mode}#[bg=$default_bg] {tabs}"
+          format_center "#[bg=$header_bg,fg=$header_fg] Zellij: #[bg=$header_bg,fg=$header_fg]{session}"
+
+          format_right  "{swap_layout}"
+          format_space  "#[bg=$default_bg]"
+          format_hide_on_overlength "true"
+          format_precedence "crl"
+
+          border_enabled  "false"
+          border_char     "─"
+          border_format   "#[fg=$border_default_fg]{char}"
+          border_position "top"
+
+          hide_frame_for_single_pane "true"
+
+          mode_normal        "#[bg=$mode_normal_bg,fg=$mode_fg,bold] NORMAL#[bg=$mode_normal_icon_bg,fg=$mode_normal_icon_fg]"
+          mode_locked        "#[bg=$mode_locked_bg,fg=$mode_fg,bold] LOCKED #[bg=$mode_locked_icon_bg,fg=$mode_locked_icon_fg]"
+          mode_resize        "#[bg=$mode_default_bg,fg=$mode_fg,bold] RESIZE#[bg=$mode_default_icon_bg,fg=$mode_default_icon_fg]"
+          mode_pane          "#[bg=$mode_default_bg,fg=$mode_fg,bold] PANE#[bg=$mode_default_icon_bg,fg=$mode_default_icon_fg]"
+          mode_tab           "#[bg=$mode_default_bg,fg=$mode_fg,bold] TAB#[bg=$mode_default_icon_bg,fg=$mode_default_icon_fg]"
+          mode_scroll        "#[bg=$mode_default_bg,fg=$mode_fg,bold] SCROLL#[bg=$mode_default_icon_bg,fg=$mode_default_icon_fg]"
+          mode_enter_search  "#[bg=$mode_default_bg,fg=$mode_fg,bold] ENT-SEARCH#[bg=$mode_default_icon_bg,fg=$mode_default_icon_fg]"
+          mode_search        "#[bg=$mode_default_bg,fg=$mode_fg,bold] SEARCHARCH#[bg=$mode_default_icon_bg,fg=$mode_default_icon_fg]"
+          mode_rename_tab    "#[bg=$mode_default_bg,fg=$mode_fg,bold] RENAME-TAB#[bg=$mode_default_icon_bg,fg=$mode_default_icon_fg]"
+          mode_rename_pane   "#[bg=$mode_default_bg,fg=$mode_fg,bold] RENAME-PANE#[bg=$mode_default_icon_bg,fg=$mode_default_icon_fg]"
+          mode_session       "#[bg=$mode_default_bg,fg=$mode_fg,bold] SESSION#[bg=$mode_default_icon_bg,fg=$mode_default_icon_fg]"
+          mode_move          "#[bg=$mode_default_bg,fg=$mode_fg,bold] MOVE#[bg=$mode_default_icon_bg,fg=$mode_default_icon_fg]"
+          mode_prompt        "#[bg=$mode_default_bg,fg=$mode_fg,bold] PROMPT#[bg=$mode_default_icon_bg,fg=$mode_default_icon_fg]"
+          mode_tmux          "#[bg=$mode_tmux_bg,fg=$mode_fg,bold] TMUX#[bg=$mode_tmux_icon_bg,fg=$mode_tmux_icon_fg]"
+
+          
+
+          
+          // formatting for inactive tabs
+          tab_normal              "#[bg=$tab_normal_bg,fg=$tab_normal_fg]#[bg=$tab_normal_icon_bg,fg=$tab_normal_icon_fg,bold]#[bg=$tab_normal_index_bg,fg=$tab_normal_index_fg,bold]{index} #[bg=$tab_normal_tab_name_bg,fg=$tab_normal_tab_name_fg,bold] {name}{floating_indicator}#[bg=$tab_normal_icon_end_bg,fg=$tab_normal_icon_end_fg,bold]"
+          tab_normal_fullscreen   "#[bg=$tab_normal_bg,fg=$tab_normal_fg]#[bg=$tab_normal_icon_bg,fg=$tab_normal_icon_fg,bold]{index} #[bg=$tab_normal_tab_name_bg,fg=$tab_normal_tab_name_fg,bold] {name}{fullscreen_indicator}#[bg=$tab_normal_icon_end_bg,fg=$tab_normal_icon_end_fg,bold]"
+          tab_normal_sync         "#[bg=$tab_normal_bg,fg=$tab_normal_fg]#[bg=$tab_normal_icon_bg,fg=$tab_normal_icon_fg,bold]{index} #[bg=$tab_normal_tab_name_bg,fg=$tab_normal_tab_name_fg,bold] {name}{sync_indicator}#[bg=$tab_normal_icon_end_bg,fg=$tab_normal_icon_end_fg,bold]"
+
+          // formatting for the current active tab
+          tab_active              "#[bg=$tab_active_bg,fg=$tab_active_fg]#[bg=$tab_active_icon_bg,fg=$tab_active_icon_fg,bold]{index} #[bg=$tab_active_tab_name_bg,bold] #[bg=$tab_active_tab_name_bg,fg=$tab_active_tab_name_fg,bold,underscore]{name}{floating_indicator}#[bg=$tab_active_icon_end_bg,fg=$tab_active_icon_end_fg,bold]"
+          tab_active_fullscreen   "#[bg=$tab_active_bg,fg=$tab_active_fg]#[bg=$tab_active_icon_bg,fg=$tab_active_icon_fg,bold]{index} #[bg=$tab_active_tab_name_bg,fg=$tab_active_tab_name_fg,bold] {name}{fullscreen_indicator}#[bg=$tab_active_icon_end_bg,fg=$tab_active_icon_end_fg,bold]"
+          tab_active_sync         "#[bg=$tab_active_bg,fg=$tab_active_fg]#[bg=$tab_active_icon_bg,fg=$tab_active_icon_fg,bold]{index} #[bg=$tab_active_tab_name_bg,fg=$tab_active_tab_name_fg,bold] {name}{sync_indicator}#[bg=$tab_active_icon_end_bg,fg=$tab_active_icon_end_fg,bold]"
+
+          // separator between the tabs
+          tab_separator           "#[bg=$tab_separator_bg] "
+
+          // indicators
+          tab_sync_indicator       " "
+          tab_fullscreen_indicator " 󰊓"
+          tab_floating_indicator   " 󰹙"
+
+          command_git_branch_command     "git rev-parse --abbrev-ref HEAD"
+          command_git_branch_format      "#[fg=blue] {stdout} "
+          command_git_branch_interval    "10"
+          command_git_branch_rendermode  "static"
+
+          datetime        "#[fg=$datetime_fg,bold] {format} "
+          datetime_format "%A, %d %b %Y %H:%M"
+          datetime_timezone "America/Sao_Paulo"
+     }
+
+   }
+   children
+ }
+}
