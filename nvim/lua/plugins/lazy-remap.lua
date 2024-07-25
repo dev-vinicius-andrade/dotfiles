@@ -1,10 +1,5 @@
 local keymap = vim.keymap
-local function defaults()
-    keymap.set("v", "<leader>ctc", '"+y', {
-        noremap = true,
-        silent = true
-    })
-end
+
 local function number_increment_decrement_keymaps()
     keymap.set("n", "<leader>+", "<C-a>", {
         desc = "Increment number"
@@ -228,16 +223,16 @@ local function auto_session_keymaps()
 end
 local function substitute_keymaps()
     local substitute = require("substitute")
-    vim.keymap.set("n", "s", substitute.operator, {
+    keymap.set("n", "s", substitute.operator, {
         desc = "Substitute with motion"
     })
-    vim.keymap.set("n", "ss", substitute.line, {
+    keymap.set("n", "ss", substitute.line, {
         desc = "Substitute line"
     })
-    vim.keymap.set("n", "S", substitute.eol, {
+    keymap.set("n", "S", substitute.eol, {
         desc = "Substitute to end of line"
     })
-    vim.keymap.set("x", "s", substitute.visual, {
+    keymap.set("x", "s", substitute.visual, {
         desc = "Substitute in visual mode"
     })
 end
@@ -289,12 +284,24 @@ local function lazy_git()
         desc = "Open lazy git"
     })
 end
+local function copy_to_clipboard()
+    keymap.set("v", "<leader>ctc", '"+y', {
+        noremap = true,
+        silent = true
+    })
+    keymap.set("v", "<leader>ctcm", function()
+        vim.cmd("normal! " .. vim.fn.visualMode() .. 'y"')
+    end, {
+        noremap = true,
+        silent = true
+    })
+end
 return {
     "codescovery/lazy-remap.nvim",
     event = "VeryLazy",
 
     config = function()
-        defaults()
+        copy_to_clipboard()
         number_increment_decrement_keymaps()
         split_windows_keymaps()
         tabs_keymaps()
