@@ -1,6 +1,7 @@
 return {
-    "https://git.sr.ht/~swaits/zellij-nav.nvim",
-    lazy = true,
+    "dynamotn/Navigator.nvim",
     event = "VeryLazy",
-    opts = {}
+    config = function()
+        require("Navigator").setup()
+    end
 }

@@ -276,62 +276,19 @@ local function deselect_visual_mode()
         desc = "Deselect visual mode"
     })
 end
-local function tmux_navigation()
-    keymap.set("n", "C-h", ":TmuxNavigateLeft<CR>", {
-        silent = true,
-        desc = "Navigate left"
-    })
-    keymap.set("n", "C-j", ":TmuxNavigateDown<CR>", {
-        silent = true,
-        desc = "Navigate down"
-    })
-    keymap.set("n", "C-k", ":TmuxNavigateUp<CR>", {
-        silent = true,
-        desc = "Navigate up"
-    })
-    keymap.set("n", "C-l", ":TmuxNavigateRight<CR>", {
-        silent = true,
-        desc = "Navigate right"
-    })
-    keymap.set("n", "C-\\", ":TmuxNavigatePrevious<CR>", {
-        silent = true,
-        desc = "Navigate previous"
-    })
-end
-local function window_navigation()
 
-    keymap.set("n", "<C-h>", ":wincmd h<CR>")
-    keymap.set("n", "<C-j>", ":wincmd j<CR>")
-    keymap.set("n", "<C-k>", ":wincmd k<CR>")
-    keymap.set("n", "<C-l>", ":wincmd l<CR>")
+local function navigator()
+
+    keymap.set("n", "<C-h>", "<CMD>NavigatorLeft<CR>")
+    keymap.set("n", "<C-j>", "<CMD>NavigatorDown<CR>")
+    keymap.set("n", "<C-k>", "<CMD>NavigatorUp<CR>")
+    keymap.set("n", "<C-l>", "<CMD>NavigatorRight<CR>")
 end
 local function lazy_git()
-
     keymap.set("n", "<leader>lg", "<cmd>LazyGit<cr>", {
         desc = "Open lazy git"
     })
 end
-local function zellij_navigation()
-
-    keymap.set("n", "<c-h>", "<cmd>ZellijNavigateLeft<CR>", {
-        silent = true,
-        desc = "Navigate left"
-    })
-    keymap.set("n", "<c-j>", "<cmd>ZellijNavigateDown<CR>", {
-        silent = true,
-        desc = "Navigate down"
-    })
-    keymap.set("n", "<c-k>", "<cmd>ZellijNavigateUp<CR>", {
-        silent = true,
-        desc = "Navigate up"
-    })
-    keymap.set("n", "<c-l>", "<cmd>ZellijNavigateRight<CR>", {
-
-        silent = true,
-        desc = "Navigate right"
-    })
-end
-
 return {
     "codescovery/lazy-remap.nvim",
     event = "VeryLazy",
@@ -356,9 +313,7 @@ return {
         jump_to_end_of_word_keymaps()
         return_to_normal_mode()
         deselect_visual_mode()
-        tmux_navigation()
-        window_navigation()
-        zellij_navigation()
+        navigator()
         lazy_git()
     end
 }
