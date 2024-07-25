@@ -16,6 +16,8 @@ initialize_zsh_environment() {
   [[ -f $DOT_FILES_DIR/zsh/functions.zsh ]] && source $DOT_FILES_DIR/zsh/functions.zsh && [[ $print_scripts_loaded == "true" ]] && echo "Functions loaded"
   [[ -f $DOT_FILES_DIR/zsh/starship.zsh ]] && source $DOT_FILES_DIR/zsh/starship.zsh && [[ $print_scripts_loaded == "true" ]] && echo "Starship loaded"
   [[ -f $DOT_FILES_DIR/zsh/nvm.zsh ]] && source $DOT_FILES_DIR/zsh/nvm.zsh && [[ $print_scripts_loaded == "true" ]] && echo "Nvm loaded"
+
+  generate_nvim_languages_to_install_json
   # Resolve the symlink of .zshrc to its absolute path
   zshrc_real_path=$(realpath "${ZDOTDIR:-$HOME}/.zshrc")
   # Extract the directory part from the path
