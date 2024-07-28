@@ -1,7 +1,7 @@
 #! /bin/zsh
 if grep -qi 'microsoft\|wsl' /proc/version; then
   export IS_WSL=true
-  export HOST_HOME=$(wslpath $(cmd.exe /C "echo %USERPROFILE%" 2>/dev/null) | tr -d '\r')
+  export HOST_HOME= echo "$(wslpath $(cmd.exe /C "echo %USERPROFILE%" 2>/dev/null) | tr -d '\r')"
 else
   export IS_WSL=false
   export HOST_HOME=$HOME
