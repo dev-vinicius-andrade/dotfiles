@@ -2,12 +2,13 @@ initialize_zsh_environment() {
   # CodeWhisperer pre block. Keep at the top of this file.
   [[ -f "${HOME}/Library/Application Support/codewhisperer/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/codewhisperer/shell/zshrc.pre.zsh"
   ZSH_THEME="robbyrussell"
-  DOT_FILES_DIR="$(dirname "${(%):-%N}")" 
-  if [ -n "${ZSH_VERSION}" ]; then
-    DOT_FILES_DIR="$(dirname "${(%):-%x}")"
-  else
-    DOT_FILES_DIR="$(dirname "$(readlink -f "$0")")"
-  fi
+  DOT_FILES_DIR="$(dirname "${(%):-%x}")"
+  # echo "DOT_FILES_DIR: $DOT_FILES_DIR"
+  # if [ -n "${ZSH_VERSION}" ]; then
+  #   DOT_FILES_DIR="$(dirname "${(%):-%x}")"
+  # else
+  #   DOT_FILES_DIR="$(dirname "$(readlink -f "$0")")"
+  # fi
   source "$DOT_FILES_DIR/scripts/zsh/utils.zsh"
   local args=("$@")
   local print_scripts_loaded="true"
@@ -22,7 +23,7 @@ initialize_zsh_environment() {
   [[ -f $DOT_FILES_DIR/zsh/starship.zsh ]] && source $DOT_FILES_DIR/zsh/starship.zsh && [[ $print_scripts_loaded == "true" ]] && echo "Starship loaded"
   [[ -f $DOT_FILES_DIR/zsh/nvm.zsh ]] && source $DOT_FILES_DIR/zsh/nvm.zsh && [[ $print_scripts_loaded == "true" ]] && echo "Nvm loaded"
 
-  generate_nvim_languages_to_install_json
+  generate_nvim_mson_install_configuration
   # Resolve the symlink of .zshrc to its absolute path
   zshrc_real_path=$(realpath "${ZDOTDIR:-$HOME}/.zshrc")
   # Extract the directory part from the path

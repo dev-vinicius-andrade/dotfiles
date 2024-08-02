@@ -1,5 +1,4 @@
 #! /bin/zsh
-source "$DOTFILES_DIR/scripts/zsh/spinning_progress_bar.zsh"
 command_exists() {
     command -v "$1" &>/dev/null
 }

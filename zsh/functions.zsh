@@ -111,3 +111,16 @@ function clear_terminal(){
 function edit_dot_files(){
   nvim ~/dotfiles/
 }
+generate_nvim_mson_install_configuration(){
+  local nvim_languages_to_install_json="$DOT_FILES_DIR/nvim/nvim-mason-install-configuration.json"
+  if [ ! -f $nvim_languages_to_install_json ]; then
+    echo "{" > $nvim_languages_to_install_json
+    echo "  \"languages\": [" >> $nvim_languages_to_install_json
+    echo "" >> $nvim_languages_to_install_json
+    echo "  ]," >> $nvim_languages_to_install_json
+    echo "  \"tools\": [" >> $nvim_languages_to_install_json
+    echo "" >> $nvim_languages_to_install_json
+    echo "  ]" >> $nvim_languages_to_install_json
+    echo "}" >> $nvim_languages_to_install_json
+  fi
+}

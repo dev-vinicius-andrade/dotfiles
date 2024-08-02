@@ -4,3 +4,4 @@ tmpFont.zip
 .secrets
 **/.bin
 nvim/nvim-mason-install-configuration.json
+nushell/history.txt
