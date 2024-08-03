@@ -10,4 +10,5 @@ if [ -n "$IS_WSL" ]; then
     alias cmd="cmd.exe"
     alias explorer="explorer.exe"
     alias notepad="notepad.exe"
+    alias lslha="ls -lha"
 fi
