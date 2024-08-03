@@ -1,5 +1,5 @@
 local opt = vim.opt -- for conciseness
---encoding
+-- encoding
 opt.encoding = "utf-8" -- set encoding to utf-8
 opt.fileencoding = "utf-8" -- set file encoding to utf-8
 
@@ -36,7 +36,7 @@ opt.signcolumn = "yes" -- show sign column so that text doesn't shift
 opt.backspace = "indent,eol,start" -- allow backspace on indent, end of line or insert mode start position
 
 -- clipboard
-opt.clipboard:append {"unnamed","unnamedplus"}-- use system clipboard as default register
+-- use system clipboard as default register
 
 -- split windows
 opt.splitright = true -- split vertical window to the right
