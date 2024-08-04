@@ -1,7 +1,7 @@
 #! /bin/zsh
 alias ls="eza --icons --group-directories-first"
 alias ll="eza --icons --group-directories-first -l"
-alias svi="sudo -E vim $@"
+alias svi="sudo -E vi $@"
 alias svim="sudo -E vim $@"
 alias snvim="sudo -E nvim $@"
 alias lslha="ls -lha"
