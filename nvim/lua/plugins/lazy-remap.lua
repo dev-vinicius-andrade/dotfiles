@@ -285,16 +285,21 @@ local function lazy_git()
     })
 end
 local function copy_to_clipboard()
-    keymap.set("v", "<leader>ctc", '"+y', {
+
+    keymap.set({"n","v"}, "<leader>y", [["+y]], {
         noremap = true,
         silent = true
     })
-    keymap.set("v", "<leader>ctcm", function()
-        vim.cmd("normal! " .. vim.fn.visualMode() .. 'y"')
-    end, {
-        noremap = true,
-        silent = true
-    })
+    -- keymap.set("v", "<leader>ctc", '"+y', {
+    --     noremap = true,
+    --     silent = true
+    -- })
+    --     keymap.set("v", "<leader>ctcm", function()
+    --         vim.cmd("normal! " .. vim.fn.visualMode() .. 'y"')
+    --     end, {
+    --         noremap = true,
+    --         silent = true
+    --     })
 end
 return {
     "codescovery/lazy-remap.nvim",
