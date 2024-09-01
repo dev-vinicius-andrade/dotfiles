@@ -1,9 +1,9 @@
 
 [font]
-size=14
+size=20
 
 [font.normal]
-family="Hack Nerd Font"
+family="JetBrainsMono NL 10"
 style="Regular"
 
 [font.bold]
