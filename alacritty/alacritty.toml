@@ -1,21 +1,21 @@
 
 [font]
-size=14
+size=12
 
 [font.normal]
-family="Hack Nerd Font"
+family="JetBrainsMono"
 style="Regular"
 
 [font.bold]
-family="Hack Nerd Font"
+family="JetBrainsMono"
 style="Bold"
 
 [font.italic]
-family="Hack Nerd Font"
+family="JetBrainsMono"
 style="Italic"
 
 [font.bold_italic]
-family="Hack Nerd Font"
+family="JetBrainsMono"
 style="Bold Italic"
 
 
@@ -24,7 +24,7 @@ history=100000
 multiplier=3
 
 [window]
-option_as_alt=OnlyLeft
+option_as_alt="Both"
 
 [window.padding]
 x=3

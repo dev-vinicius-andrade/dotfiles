@@ -274,10 +274,15 @@ end
 
 local function navigator()
 
-    keymap.set("n", "<C-h>", "<CMD>NavigatorLeft<CR>")
-    keymap.set("n", "<C-j>", "<CMD>NavigatorDown<CR>")
-    keymap.set("n", "<C-k>", "<CMD>NavigatorUp<CR>")
-    keymap.set("n", "<C-l>", "<CMD>NavigatorRight<CR>")
+    -- keymap.set("n", "<C-h>", "<CMD>NavigatorLeft<CR>")
+    -- keymap.set("n", "<C-j>", "<CMD>NavigatorDown<CR>")
+    -- keymap.set("n", "<C-k>", "<CMD>NavigatorUp<CR>")
+    -- keymap.set("n", "<C-l>", "<CMD>NavigatorRight<CR>")
+    keymap.set("n", "<C-h>", "<CMD>ZellijNavigateLeft<CR>")
+    keymap.set("n", "<C-j>", "<CMD>ZellijNavigateDown<CR>")
+    keymap.set("n", "<C-k>", "<CMD>ZellijNavigateUp<CR>")
+    keymap.set("n", "<C-l>", "<CMD>ZellijNavigateRight<CR>")
+
 end
 local function lazy_git()
     keymap.set("n", "<leader>lg", "<cmd>LazyGit<cr>", {
