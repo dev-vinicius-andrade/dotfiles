@@ -4,7 +4,7 @@ initialize_zsh_environment() {
   ZSH_THEME="robbyrussell"
   DOT_FILES_DIR="$(dirname "${(%):-%x}")"
   if [ -h "~/.zshrc" ]; then
-    DOT_FILES_DIR="$(dirname "$(readlink "$DOT_FILES_DIR")")"
+    DOT_FILES_DIR="$(dirname $(realpath $(readlink ~/.zshrc)))"
   fi
   echo "DOT_FILES_DIR: $DOT_FILES_DIR"
   # if [ -n "${ZSH_VERSION}" ]; then
