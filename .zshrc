@@ -3,6 +3,9 @@ initialize_zsh_environment() {
   [[ -f "${HOME}/Library/Application Support/codewhisperer/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/codewhisperer/shell/zshrc.pre.zsh"
   ZSH_THEME="robbyrussell"
   DOT_FILES_DIR="$(dirname "${(%):-%x}")"
+  if [ -h "${ZDOTDIR:-$HOME}/.zshrc" ]; then
+    DOT_FILES_DIR="$(dirname "$(readlink "$DOT_FILES_DIR)")"
+  fi
   # echo "DOT_FILES_DIR: $DOT_FILES_DIR"
   # if [ -n "${ZSH_VERSION}" ]; then
   #   DOT_FILES_DIR="$(dirname "${(%):-%x}")"

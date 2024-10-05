@@ -27,15 +27,33 @@ local function set_keymaps_on_lsp_attach(ev)
 	end
 end
 
+local function load_lsp_servers()
+	local servers = {}
+	local scandir = vim.loop.fs_scandir("path/to/your/nvim/config/plugins/lsp/servers")
+	if scandir then
+		while true do
+			local file, filetype = vim.loop.fs_scandir_next(scandir)
+			if not file then break end
+			if filetype == "file" and file:match("%.lua$") then
+				local server_name = file:gsub("%.lua$", "")
+				local server_config = require("plugins.lsp.servers." .. server_name)
+				servers[server_name] = server_config
+			end
+		end
+	end
+	return servers
+end
+
 local function configure_lsp_servers(capabilities, lspconfig)
-	local servers = {
-		emmet_ls = require("plugins.lsp.servers.emmet_ls"),
-		graphql = require("plugins.lsp.servers.graphql"),
-		lua_ls = require("plugins.lsp.servers.lua_ls"),
-		omnisharp = require("plugins.lsp.servers.omnisharp"),
-		omnisharp_mono = require("plugins.lsp.servers.omnisharp_mono"),
-		svelte = require("plugins.lsp.servers.svelte"),
-	}
+	local servers = load_lsp_servers()
+ --  {
+	-- 	emmet_ls = require("plugins.lsp.servers.emmet_ls"),
+	-- 	graphql = require("plugins.lsp.servers.graphql"),
+	-- 	lua_ls = require("plugins.lsp.servers.lua_ls"),
+	-- 	omnisharp = require("plugins.lsp.servers.omnisharp"),
+	-- 	omnisharp_mono = require("plugins.lsp.servers.omnisharp_mono"),
+	-- 	svelte = require("plugins.lsp.servers.svelte"),
+	-- }
 	local mason_lspconfig = require("mason-lspconfig")
 	mason_lspconfig.setup({
 		handlers = {
