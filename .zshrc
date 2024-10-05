@@ -6,7 +6,7 @@ initialize_zsh_environment() {
   if [ -h "~/.zshrc" ]; then
     DOT_FILES_DIR="$(dirname "$(readlink "$DOT_FILES_DIR")")"
   fi
-  # echo "DOT_FILES_DIR: $DOT_FILES_DIR"
+  echo "DOT_FILES_DIR: $DOT_FILES_DIR"
   # if [ -n "${ZSH_VERSION}" ]; then
   #   DOT_FILES_DIR="$(dirname "${(%):-%x}")"
   # else
