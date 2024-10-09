@@ -3,16 +3,11 @@ initialize_zsh_environment() {
   [[ -f "${HOME}/Library/Application Support/codewhisperer/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/codewhisperer/shell/zshrc.pre.zsh"
   ZSH_THEME="robbyrussell"
   DOT_FILES_DIR="$(dirname "${(%):-%x}")"
-  if [ -h "$HOME/.zshrc" ]; then
-    echo "Link"
-    DOT_FILES_DIR="$(dirname $(realpath $(readlink "$HOME/.zshrc")))"
-  fi
-  echo "DOT_FILES_DIR: $DOT_FILES_DIR"
-  # if [ -n "${ZSH_VERSION}" ]; then
-  #   DOT_FILES_DIR="$(dirname "${(%):-%x}")"
-  # else
-  #   DOT_FILES_DIR="$(dirname "$(readlink -f "$0")")"
+  # if [ -h "$HOME/.zshrc" ]; then
+  #   echo "Link"
+  #   DOT_FILES_DIR="$(dirname $(realpath $(readlink "$HOME/.zshrc")))"
   # fi
+  echo "DOT_FILES_DIR: $DOT_FILES_DIR"
   source "$DOT_FILES_DIR/scripts/zsh/utils.zsh"
   local args=("$@")
   local print_scripts_loaded="true"
