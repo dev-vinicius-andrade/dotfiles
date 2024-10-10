@@ -3,6 +3,11 @@ initialize_zsh_environment() {
   [[ -f "${HOME}/Library/Application Support/codewhisperer/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/codewhisperer/shell/zshrc.pre.zsh"
   ZSH_THEME="robbyrussell"
   DOT_FILES_DIR="$(dirname "${(%):-%x}")"
+  zshrc_real_path=$(realpath "${ZDOTDIR:-$HOME}/.zshrc")
+  if [[ ! "$zshrc_real_path" == /nix/store/* ]]; then
+    # If not in /nix/store, use the resolved directory
+    DOT_FILES_DIR=$(dirname "$zshrc_real_path")
+  fi
   # if [ -h "$HOME/.zshrc" ]; then
   #   echo "Link"
   #   DOT_FILES_DIR="$(dirname $(realpath $(readlink "$HOME/.zshrc")))"
