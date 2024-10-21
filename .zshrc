@@ -28,13 +28,9 @@ initialize_zsh_environment() {
   [[ -f $DOT_FILES_DIR/zsh/nvm.zsh ]] && source $DOT_FILES_DIR/zsh/nvm.zsh && [[ $print_scripts_loaded == "true" ]] && echo "Nvm loaded"
 
   generate_nvim_mson_install_configuration
-  # Resolve the symlink of .zshrc to its absolute path
-  zshrc_real_path=$(realpath "${ZDOTDIR:-$HOME}/.zshrc")
   # Extract the directory part from the path
   dotfiles_dir=$(dirname "$zshrc_real_path")
 
-  # Export the DOTFILES_DIR environment variable
-  export DOTFILES_DIR=$dotfiles_dir
 
   # Load Starship
   eval "$(starship init zsh)"

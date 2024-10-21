@@ -71,7 +71,7 @@ export repos="$HOME/Development/repos/"
 export PATH="$PATH:$HOME/.dotnet/tools:$HOME/.local/bin"
 export APPDATA="$HOME"
 export PYTHON=/usr/bin/python3
-export LANG=C.UTF-8
+export LANG=en_US.UTF-8
 if [ -d "$HOME/.dotnet/tools" ]; then
   export PATH="$HOME/.dotnet/tools:$PATH"
 fi
