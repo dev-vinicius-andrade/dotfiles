@@ -32,11 +32,11 @@ initialize_zsh_environment() {
   dotfiles_dir=$(dirname "$zshrc_real_path")
 
 
-  # Load Starship
-  eval "$(starship init zsh)"
-
   # Load Direnv
   eval "$(direnv hook zsh)"
+
+  # Load Starship
+  eval "$(starship init zsh)"
 
   create_gcp_dir_if_not_exists
   create_microsoft_symbolic_link
@@ -54,5 +54,6 @@ initialize_zsh_environment() {
   if [ -f /usr/local/lib/node_modules/@angular/cli/bin/ng ]; then
     source <(/usr/local/lib/node_modules/@angular/cli/bin/ng completion zsh)
   fi
+  export LC_ALL=en_US.utf8
 }
 initialize_zsh_environment "$@"
