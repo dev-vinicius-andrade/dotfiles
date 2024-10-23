@@ -84,3 +84,6 @@ fi
 if [ -d "/home/linuxbrew/.linuxbrew/bin" ]; then
   export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 fi
+if [[ -f "$HOME/.kube/config" && -z $KUBECONFIG ]]; then
+  export KUBECONFIG="$HOME/.kube/config"
+fi
