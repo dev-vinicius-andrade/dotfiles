@@ -17,7 +17,8 @@ $time\
 \n\
 [➜ ](bold blue)
 """
-
+[fill]
+symbol=' '
 [memory_usage]
 disabled =false
 threshold=1
