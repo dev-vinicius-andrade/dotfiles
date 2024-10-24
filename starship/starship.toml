@@ -1,5 +1,5 @@
 "$schema" = 'https://starship.rs/config-schema.json'
-add_newline = true
+add_newline = false
 command_timeout = 1000
 format = """
 $os\
@@ -10,12 +10,31 @@ $directory\
 $git_branch\
 $git_status\
 $cmd_duration\
+$character\
+$fill\
+$memory_usage\
+$time\
 \n\
-$character
+[➜ ](bold blue)
 """
+[fill]
+symbol=' '
+[memory_usage]
+disabled =false
+threshold=1
+format="[$ram](bold blue) $symbol"
+symbol=" 󰍛"
+
+[time]
+disabled = false
+style="bold blue"
+format=" [$time](green) 󰥔  "
+
 [character] # The name of the module we are configuring is 'character'
-success_symbol = '[➜](bold green)' # The 'success_symbol' segment is being set to '➜' with the color 'bold green'
+success_symbol = '[](bold green)' # The 'success_symbol' segment is being set to '➜' with the color 'bold green'
 error_symbol = '[✗](bold red)' # The 'success_symbol' segment is being set to '➜' with the color 'bold green'
+
+
 [os]
 format = '[$symbol](bold white) '   
 disabled = false
@@ -105,7 +124,7 @@ untracked = ' '
 ahead = '⇡${count}'
 diverged = '⇕⇡${ahead_count}⇣${behind_count}'
 behind = '⇣${count}'
-stashed = 'stashed '
+stashed = '  '
 modified = ' '
 staged = '[++\($count\)](green)'
 renamed = '襁 '

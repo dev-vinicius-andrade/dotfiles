@@ -44,7 +44,7 @@ initialize_zsh_environment() {
   # if print_scripts_loaded is true clear the terminal
 
   if [[ $clear_terminal_on_load == "true" ]]; then
-    clear_terminal
+   clear_terminal
   fi
 
   # CodeWhisperer post block. Keep at the bottom of this file.
