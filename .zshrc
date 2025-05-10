@@ -57,3 +57,8 @@ initialize_zsh_environment() {
   export LC_ALL=en_US.utf8
 }
 initialize_zsh_environment "$@"
+# Check if zellij is installed and not already in a zellij session
+if command -v zellij >/dev/null 2>&1 && [ -z "$ZELLIJ" ]; then
+  # Start zellij
+  exec zellij
+fi
