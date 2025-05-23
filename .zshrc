@@ -1,4 +1,6 @@
+stty -ixon
 initialize_zsh_environment() {
+
   # CodeWhisperer pre block. Keep at the top of this file.
   [[ -f "${HOME}/Library/Application Support/codewhisperer/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/codewhisperer/shell/zshrc.pre.zsh"
   ZSH_THEME="robbyrussell"
@@ -57,3 +59,8 @@ initialize_zsh_environment() {
   export LC_ALL=en_US.utf8
 }
 initialize_zsh_environment "$@"
+# Check if zellij is installed and not already in a zellij session
+if command -v zellij >/dev/null 2>&1 && [ -z "$ZELLIJ" ]; then
+  # Start zellij
+  exec zellij
+fi
