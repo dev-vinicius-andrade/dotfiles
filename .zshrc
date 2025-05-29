@@ -69,7 +69,6 @@ if command -v yazi >/dev/null 2>&1; then
     rm -f -- "$tmp"
   }
 fi
-
 # Check if zellij is installed and not already in a zellij session
 if command -v zellij >/dev/null 2>&1 && [ -z "$ZELLIJ" ]; then
   # Start zellij
