@@ -3,7 +3,6 @@ theme "catppuccin-mocha"
 default_layout "default"
 keybinds {
     shared_except "locked" {
-        bind "Ctrl o" {}
         bind "Ctrl h" {
             MessagePlugin "file:~/.config/zellij/plugins/vim-zellij-navigator/v0.2.1/vim-zellij-navigator.wasm" {
                 name "move_focus_or_tab";
