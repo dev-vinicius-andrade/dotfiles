@@ -1,5 +1,5 @@
 return {
-  "https://git.sr.ht/~swaits/zellij-nav.nvim",
+  "https://github.com/dev-vinicius-andrade/zellij-nav.nvim",
   -- lazy = true,
   event = "VeryLazy",
   opts = {},
