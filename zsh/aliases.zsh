@@ -14,3 +14,11 @@ if [ -n "$IS_WSL" ] && [ "$IS_WSL" = "true" ]; then
     alias explorer="explorer.exe"
     alias notepad="notepad.exe"
 fi
+if command -v nix-env >/dev/null 2>&1; then
+
+  alias nxi='nix-env -i'  # install
+  alias nxu='nix-env -u'  # update
+  alias nxr='nix-env -e'  # remove
+  alias nxls='nix-env -q' # list
+  alias nxgc='nix-collect-garbage -d'
+fi
