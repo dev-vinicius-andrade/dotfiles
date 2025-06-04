@@ -1,4 +1,4 @@
-retun {
+return {
     "mikavilpas/yazi.nvim",
     event = "VeryLazy",
     dependencies = { -- check the installation instructions at
