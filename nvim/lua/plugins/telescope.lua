@@ -1,7 +1,6 @@
 return {
-
 	"nvim-telescope/telescope.nvim",
-	branch = "0.1.x",
+	branch = "master", -- CHANGED: Flipped from "0.1.x" to master to include the Treesitter fix
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 		{
