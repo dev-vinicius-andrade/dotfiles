@@ -49,6 +49,7 @@ initialize_zsh_environment() {
   print_scripts_loaded=$(get_argument "${args[@]}" "--print-scripts-loaded" "true" "return_value")
   clear_terminal_on_load=$(get_argument "${args[@]}" "--clear-terminal-on-load" "true" "return_value")
 
+  source ~/.zshenv
   [[ -f $DOT_FILES_DIR/zsh/environment-variables.zsh ]] && source $DOT_FILES_DIR/zsh/environment-variables.zsh && [[ $print_scripts_loaded == "true" ]] && echo "Environment Variables Loaded"
   [[ -f $SECRET_ENV_FILE ]] && source $SECRET_ENV_FILE && [[ $print_scripts_loaded == "true" ]] && echo "Secrets env file loaded"
   [[ -f $DOT_FILES_DIR/zsh/aliases.zsh ]] && source $DOT_FILES_DIR/zsh/aliases.zsh && [[ $print_scripts_loaded == "true" ]] && echo "Aliases loaded"
@@ -115,7 +116,11 @@ fi
 if command -v starship >/dev/null 2>&1; then
   eval "$(starship init zsh)"
 fi
-
+eval "$(fnm env --use-on-cd --shell zsh)"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+. "$HOME/.atuin/bin/env"
+
+eval "$(atuin init zsh --disable-up-arrow)"
