@@ -84,6 +84,7 @@ function cat_secrets(){
   cat $SECRET_ENV_FILE
 }
 function reload_zsh(){
+  source ~/.zshenv
   source ~/.zshrc
 }
 function source_zsh_recursive() {

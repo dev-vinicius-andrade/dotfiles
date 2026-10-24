@@ -84,6 +84,9 @@ fi
 if [ -d "/home/linuxbrew/.linuxbrew/bin" ]; then
   export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 fi
-if [[ -f "$HOME/.kube/config" && -z $KUBECONFIG ]]; then
+# ~/.kube/merged.yaml = k3s-local + home-lab-main + rancher (regenerate when the Rancher token expires, see the home-lab repo README)
+if [[ -f "$HOME/.kube/merged.yaml" && -z $KUBECONFIG ]]; then
+  export KUBECONFIG="$HOME/.kube/merged.yaml"
+elif [[ -f "$HOME/.kube/config" && -z $KUBECONFIG ]]; then
   export KUBECONFIG="$HOME/.kube/config"
 fi

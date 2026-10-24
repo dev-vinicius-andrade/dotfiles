@@ -109,7 +109,7 @@ if [ -t 1 ] && [[ $- == *i* ]] && [ -z "$ZELLIJ" ] && [ -z "$HERDR_ACTIVE" ] \
    && [ "$TERM_PROGRAM" != "vscode" ] && [ -z "$VSCODE_INJECTION" ] \
    && command -v herdr >/dev/null 2>&1; then
   export HERDR_ACTIVE=1
-  exec herdr
+  herdr
 fi
 #export STARSHIP_KEYMAP_SELECT=false
 # Always load Starship after all plugins, ZLE widgets, and keymaps are bound

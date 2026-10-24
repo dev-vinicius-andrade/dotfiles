@@ -6,6 +6,11 @@ alias svim="sudo -E vim $@"
 alias snvim="sudo -E nvim $@"
 alias lslha="ls -lha"
 alias gopull='function _gopull() { local current_dir=$(pwd); cd "$1" && git pull; cd "$current_dir"; }; _gopull'
+alias cd="z"
+alias pcu="podman compose up"
+alias pcud="podman compose up -d"
+alias pcd="podman compose down"
+alias podman_names='podman ps -a --format "table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Created}}\t{{.Ports}}"'
 
 if [ -n "$IS_WSL" ] && [ "$IS_WSL" = "true" ]; then
     if [ "$DISABLE_DOCKER_ALIASES" != "true" ]; then
