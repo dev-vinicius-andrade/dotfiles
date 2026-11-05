@@ -11,7 +11,9 @@
     { "src": "zellij", "dest": "~/.config/zellij" },
     { "src": "nushell", "dest": "~/.config/nushell" },
     { "src": "alacritty", "dest": "~/.config/alacritty" },
-    { "src": "wezterm", "dest": "~/.config/wezterm" }
+    { "src": "wezterm", "dest": "~/.config/wezterm" },
+    { "src": "atuin/config.toml", "dest": "~/.config/atuin/config.toml" }
+
   ],
   "preRequisites": [],
   "os": {
