@@ -1,4 +1,18 @@
 {
+  // Read by `envmgr dotfiles link` (https://github.com/dev-vinicius-andrade/environment-manager#dotfiles).
+  // Hyprland is left out on purpose: link it by hand on a machine that runs it.
+  "links": [
+    { "src": ".zshenv", "dest": "~/.zshenv" },
+    { "src": ".zshrc", "dest": "~/.zshrc" },
+    { "src": "starship/starship.toml", "dest": "~/.config/starship.toml" },
+    { "src": "nvim", "dest": "~/.config/nvim" },
+    { "src": "herdr", "dest": "~/.config/herdr" },
+    { "src": "yazi", "dest": "~/.config/yazi" },
+    { "src": "zellij", "dest": "~/.config/zellij" },
+    { "src": "nushell", "dest": "~/.config/nushell" },
+    { "src": "alacritty", "dest": "~/.config/alacritty" },
+    { "src": "wezterm", "dest": "~/.config/wezterm" }
+  ],
   "preRequisites": [],
   "os": {
     "packageManagers": {
