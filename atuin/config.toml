@@ -20,6 +20,14 @@ history_filter = [
   '(?i)authorization:\s*(bearer|basic|pveapitoken)',
   '(?i)--(password|token|api-key|secret)[= ]\S+',
   '(?i)\b(PROXMOX_VE_API_TOKEN|PFSENSE_API_KEY|TECHNITIUM_TOKEN)=',
+  # literal values handed to kubectl/podman/docker secrets
+  '(?i)\bcreate\s+secret\b.*--from-literal',
+  '(?i)\b(podman|docker)\s+secret\s+create\b.*(<<<|echo|printf)',
+  # JWT / base64-JSON tokens (cloudflared tunnel tokens, OIDC tokens, ...)
+  '\beyJ[A-Za-z0-9_-]{30,}',
+  # Proxmox API tokens by format, and PVEAPIToken auth strings
+  '[\w.-]+@[\w.-]+![\w.-]+=[0-9a-f]{8}-[0-9a-f]{4}-',
+  '(?i)PVEAPIToken=',
 ]
 
 [stats]
@@ -47,5 +55,46 @@ capture = true
 [pty_proxy]
 enabled = true
 
+
+# --- keeping secrets out of captured output and agent threads ----------------
+# Captured output is stored in plain text, locally only (not synced).
+# Threads (ai-session records) ARE synced, end-to-end encrypted.
+# Built-in protections already cover .env, private keys, *.pem, tfstate,
+# `printenv`, `gh auth token`, `kubectl get secret`, ... (see docs: "Keeping secrets out").
+
 [output]
 enabled = true
+# keep the command in history, never store what it printed (unanchored regexes)
+command_filter = [
+  '^sops\s+(-d|--decrypt|decrypt|exec-env|exec-file)\b',
+  '^age\s+(-d|--decrypt)\b',
+  '^age-keygen\b',
+  '^envmgr\s+profile\s+show\b.*--reveal',
+  '^kubectl\s+config\s+view\b.*--raw',
+  '^(helm|kubectl)\b.*\bget\b.*\bsecrets?\b',
+  '^(podman|docker)\s+secret\s+inspect\b',
+  '\bbase64\s+(-d|--decode)\b',
+]
+
+[security]
+# credentials atuin's built-in patterns don't know
+redact_patterns = [
+  # Proxmox VE API token: user@realm!tokenid=uuid  (keeps the token id, hides the uuid)
+  '[\w.-]+@[\w.-]+![\w.-]+=(?<secret>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})',
+  '(?i)PVEAPIToken=(?<secret>\S+)',
+  # values of the self-hosted API env vars, however they get printed
+  '(?i)\b(PROXMOX_VE_API_TOKEN|PFSENSE_API_KEY|TECHNITIUM_TOKEN)\s*[=:]\s*"?(?<secret>[^\s"]+)',
+]
+# reading these (by you or an agent) is never captured
+sensitive_files = [
+  "keys.txt",                          # age private keys (sops)
+  "~/.config/sops/age/**",
+  "~/.atuin/data/key",
+  "~/.kube/**",                        # kubeconfigs carry tokens and client certs
+  "~/.docker/config.json",             # registry auth
+  "~/.config/containers/auth.json",    # podman login credentials
+  "/run/user/*/containers/auth.json",   # podman on Linux
+  "~/.gcp/**",
+  "~/dotfiles/.secrets/**",
+  "dotfiles-secrets-*.env",            # zsh/secrets.zsh decrypted cache
+]
