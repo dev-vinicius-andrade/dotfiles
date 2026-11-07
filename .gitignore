@@ -25,5 +25,5 @@ herdr/session.json
 herdr/session-snapshots/
 
 # yazi runtime state
-yazi/plugins/*/
-!yazi/plugins/.gitkeep
+yazi/plugins/
+yazi/flavors/
