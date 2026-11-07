@@ -27,3 +27,8 @@ herdr/session-snapshots/
 # yazi runtime state
 yazi/plugins/
 yazi/flavors/
+# herdr plugins: source checkouts + build output with machine-specific paths.
+# Reinstall with `herdr plugin install ...` (see README).
+herdr/plugins/
+herdr/plugins.json
+herdr/.plugins.lock

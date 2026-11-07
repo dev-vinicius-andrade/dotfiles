@@ -40,3 +40,12 @@ autostart = true
 [ui]
 # host + exit code matter when history is synced across machines
 columns = ["exit", "duration", "time", "host", "command"]
+
+[threads]
+capture = true
+
+[pty_proxy]
+enabled = true
+
+[output]
+enabled = true
