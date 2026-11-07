@@ -71,15 +71,16 @@ return {
             }
         })
 
+        -- installs the servers and calls vim.lsp.enable() for each installed one;
+        -- per-server settings are registered with vim.lsp.config() in lspconfig.lua
         mason_lspconfig.setup({
             ensure_installed = flattened_languages_to_install,
-            automatic_enable=false,
-            automatic_installation = true -- Enable automatic installation of servers
+            automatic_enable = {
+                exclude = {"omnisharp_mono"} -- has a config file but must not start alongside omnisharp
+            }
         })
         mason_tool_installer.setup({
-            ensure_installed = tools_to_install,
-            automatic_enable=false,
-            automatic_installation = true -- Enable automatic installation of tools
+            ensure_installed = tools_to_install
         })
     end
 }
