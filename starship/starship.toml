@@ -8,15 +8,25 @@ $hostname\
 $kubernetes\
 $directory\
 $git_branch\
+$git_state\
 $git_status\
+$docker_context\
+$helm\
+$nodejs\
+$golang\
+$dotnet\
+$python\
+$rust\
+$gcloud\
+$direnv\
+$jobs\
 $cmd_duration\
-$character\
 $fill\
+$status\
 $memory_usage\
 $time\
-\n\
-[➜ ](bold blue)
-"""
+$line_break\
+$character"""
 [fill]
 symbol=' '
 [memory_usage]
@@ -30,9 +40,11 @@ disabled = false
 style="bold blue"
 format=" [$time](green) 󰥔  "
 
-[character] # The name of the module we are configuring is 'character'
-success_symbol = '[](bold green)' # The 'success_symbol' segment is being set to '➜' with the color 'bold green'
-error_symbol = '[✗](bold red)' # The 'success_symbol' segment is being set to '➜' with the color 'bold green'
+[character]
+# second line: blue arrow normally, red after a failing command, vim-mode glyph in vicmd
+success_symbol = '[➜](bold blue)'
+error_symbol = '[➜](bold red)'
+vimcmd_symbol = '[](bold green)'
 
 
 [os]
@@ -132,8 +144,24 @@ deleted = ' '
 
 # Shows kubernetes context and namespace
 [kubernetes]
-format = 'via [󱃾 $context\($namespace\)](bold purple) '
+format = 'via [󱃾 $context\($namespace\)]($style) '
+style = 'bold purple'
 disabled = false
+# only show when it matters: k8s files in the repo or an explicit KUBECONFIG
+detect_files = ['Chart.yaml', 'kustomization.yaml', 'helmfile.yaml', 'skaffold.yaml', 'Tiltfile']
+detect_folders = ['k8s', 'kubernetes', 'charts', 'manifests', 'helm']
+detect_env_vars = ['KUBECONFIG']
+
+# anything that looks like production is shouted in red
+[[kubernetes.contexts]]
+context_pattern = '.*(prod|prd|production).*'
+style = 'bold red'
+context_alias = '⚠ $0'
+
+[[kubernetes.contexts]]
+context_pattern = 'k3s-local'
+style = 'bold green'
+context_alias = 'local'
 
 # ---
 
@@ -147,10 +175,12 @@ disabled = false
 disabled = false
 
 [python]
-disabled = true
+disabled = false
+format = 'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
 
 [nodejs]
-disabled = false 
+disabled = false
+format = 'via [$symbol($version )]($style)'
 
 [ruby]
 disabled = true
@@ -161,3 +191,34 @@ disabled = true
 [cmd_duration]
 format='[$duration](bold cyan) '
 min_time=5
+
+[golang]
+format = 'via [$symbol($version )]($style)'
+
+[dotnet]
+format = 'via [$symbol($version )(🎯 $tfm )]($style)'
+
+[rust]
+format = 'via [$symbol($version )]($style)'
+
+[gcloud]
+format = 'on [$symbol$account(@$domain)(\($project\))]($style) '
+# only when a non-default config is active (switch_gcp_credentials sets one)
+detect_env_vars = ['CLOUDSDK_CONFIG', 'CLOUDSDK_ACTIVE_CONFIG_NAME', 'GOOGLE_APPLICATION_CREDENTIALS']
+
+[direnv]
+disabled = false
+format = '[$symbol$loaded/$allowed]($style) '
+
+[status]
+disabled = false
+format = '[$symbol$status]($style) '
+symbol = '✗ '
+map_symbol = true
+pipestatus = true
+
+[jobs]
+symbol = ' '
+
+[git_state]
+format = '\([$state( $progress_current/$progress_total)]($style)\) '
