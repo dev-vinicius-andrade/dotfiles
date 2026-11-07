@@ -19,5 +19,8 @@ init() {
     esac
     # enable the repo's git hooks (gitleaks pre-commit)
     git -C "$DOTFILES_DIR" config core.hooksPath .githooks
+    # yazi plugins/flavors pinned in yazi/package.toml
+    command -v ya >/dev/null 2>&1 && ya pkg install
+    return 0
 }
 init "$@"
