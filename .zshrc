@@ -64,6 +64,7 @@ _dot_source "$SECRET_ENV_FILE"                 # legacy plaintext, gitignored
 _dot_source "$DOT_FILES_DIR/zsh/aliases.zsh"
 _dot_source "$DOT_FILES_DIR/zsh/functions.zsh"
 _dot_source "$DOT_FILES_DIR/zsh/keybinds.zsh"
+_dot_source "$DOT_FILES_DIR/zsh/highlighting.zsh"
 source_zsh_recursive "$DOT_FILES_DIR/zsh/functions"
 _dot_source "$HOME/.zshrc.local"               # machine-only, untracked
 
@@ -88,7 +89,7 @@ if (( $+commands[yazi] )); then
 fi
 
 # prompt: after all plugins, widgets and keymaps are bound
-(( $+commands[starship] )) && eval "$(starship init zsh)"
+_dot_source "$DOT_FILES_DIR/zsh/prompt.zsh"
 
 # atuin last so its Ctrl-R binding wins
 if (( $+commands[atuin] )); then

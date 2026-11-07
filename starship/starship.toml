@@ -1,4 +1,10 @@
 "$schema" = 'https://starship.rs/config-schema.json'
+# Two-line prompt. `format` is used as-is by PowerShell/bash/etc.
+# zsh instead prints profiles.header once from a precmd hook and keeps only the
+# short profiles.input as the live PROMPT, with no RPROMPT (see zsh/prompt.zsh):
+# zsh redraws the live prompt on every terminal resize, and any long or
+# multi-line live prompt leaves stacked fragments when the terminal shrinks.
+# Keep profiles.header in sync with the first line of `format`.
 add_newline = false
 command_timeout = 1000
 format = """
@@ -27,8 +33,10 @@ $memory_usage\
 $time\
 $line_break\
 $character"""
+
 [fill]
-symbol=' '
+symbol = ' '
+
 [memory_usage]
 disabled =false
 threshold=1
@@ -190,7 +198,7 @@ disabled = true
 
 [cmd_duration]
 format='[$duration](bold cyan) '
-min_time=5
+min_time = 2000 # milliseconds: only show commands slower than 2s
 
 [golang]
 format = 'via [$symbol($version )]($style)'
@@ -222,3 +230,7 @@ symbol = ' '
 
 [git_state]
 format = '\([$state( $progress_current/$progress_total)]($style)\) '
+
+[profiles]
+header = "$os$username$hostname$kubernetes$directory$git_branch$git_state$git_status$docker_context$helm$nodejs$golang$dotnet$python$rust$gcloud$direnv$jobs$cmd_duration$fill$status$memory_usage$time"
+input = "$character"
