@@ -1,5 +1,4 @@
 #! /bin/zsh
-source $DOT_FILES_DIR/zsh/functions
 function colormap() {
   for i in {0..255}; do print -Pn "%K{$i}  %k%F{$i}${(l:3::0:)i}%f " ${${(M)$((i%6)):#3}:+$'\n'}; done
 }
@@ -23,9 +22,11 @@ function create_secret_file_if_not_exists(){
     chmod u+r+x $SECRET_ENV_FILE
   fi
 }
+# Legacy plaintext secrets file (gitignored). Prefer `secrets_edit` (sops, see zsh/secrets.zsh).
 function create_secret_env_var(){
   local secret_name=$1
   local secret_value=$2
+  create_secret_file_if_not_exists
 
   echo "Creating secret $secret_name"
  
@@ -42,21 +43,12 @@ function create_secret_env_var(){
     fi
   fi
   # Add the new declaration
-  echo "export $secret_name=$secret_value" >> "$SECRET_ENV_FILE"
+  printf "export %s=%q\n" "$secret_name" "$secret_value" >> "$SECRET_ENV_FILE"
   reload_zsh
 }
 function create_microsoft_symbolic_link(){
-  if [ ! -d ~/.microsoft ]; then
-    echo "~/.microsoft directory does not exist. Ignoring creation of symbolik link."
-  else
-      if [ ! -d ~/Microsoft ]; then
-        # Create a symbolic link from ~/.microsoft to ~/Microsoft
-        ln -s ~/.microsoft ~/Microsoft
-        echo "Symbolic link created from ~/.microsoft to ~/Microsoft"
-      else
-        echo "~/Microsoft directory already exists, skipping symbolic link creation"
-      fi
-  fi
+  # ~/Microsoft -> ~/.microsoft (silent; only when the source exists and the link doesn't)
+  [[ -d ~/.microsoft && ! -e ~/Microsoft ]] && ln -s ~/.microsoft ~/Microsoft
 }
 
 function create_gcp_dir_if_not_exists(){
@@ -84,33 +76,20 @@ function cat_secrets(){
   cat $SECRET_ENV_FILE
 }
 function reload_zsh(){
-  source ~/.zshenv
-  source ~/.zshrc
+  exec zsh
 }
 function source_zsh_recursive() {
-  local folder="$1"
-
-  if [ ! -d "$folder" ]; then
-    echo "Folder '$folder' does not exist."
-    return 1
-  fi
-
-  local zsh_files=($(find "$folder" -type f -name "*.zsh"))
-
-  for file in "${zsh_files[@]}"; do
-    source "$file"
-    if [ $? -eq 0 ]; then
-      echo "Sourced: $file"
-    else
-      echo "Failed to source: $file"
-    fi
+  local folder="$1" file
+  [[ -d "$folder" ]] || return 1
+  for file in "$folder"/**/*.zsh(N.); do
+    source "$file" || print -u2 "Failed to source: $file"
   done
 }
 function clear_terminal(){
   clear
 }
 function edit_dot_files(){
-  nvim ~/dotfiles/
+  nvim "$DOT_FILES_DIR"
 }
 generate_nvim_mson_install_configuration(){
   local nvim_languages_to_install_json="$DOT_FILES_DIR/nvim/nvim-mason-install-configuration.json"

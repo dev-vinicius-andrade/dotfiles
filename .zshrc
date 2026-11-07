@@ -1,126 +1,96 @@
-stty -ixon
+# ~/.zshrc — interactive shells only.
+# Set DOTFILES_VERBOSE=1 to print what gets loaded (startup is quiet by default so
+# real errors stay visible). Measure startup with: time zsh -i -c exit
+stty -ixon 2>/dev/null
 
-initialize_zsh_environment() {
-  # CodeWhisperer pre block. Keep at the top of this file.
-  [[ -f "${HOME}/Library/Application Support/codewhisperer/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/codewhisperer/shell/zshrc.pre.zsh"
+# --- herdr: start it first, before any other init ----------------------------
+# Guarded against nested sessions, Zellij, and editor terminals (VS Code needs a
+# plain shell). Leaving herdr closes this outer shell; if herdr fails to start,
+# you fall through to a normal shell.
+if [[ -t 1 && $- == *i* && -z "$ZELLIJ" && -z "$HERDR_ACTIVE" \
+      && "$TERM_PROGRAM" != "vscode" && -z "$VSCODE_INJECTION" && -z "$DOTFILES_NO_HERDR" ]] \
+   && (( $+commands[herdr] )); then
+  export HERDR_ACTIVE=1
+  herdr && exit
+fi
 
-  # Path to your Oh My Zsh installation
-  export ZSH="$HOME/.oh-my-zsh"
-  ZSH_THEME="robbyrussell"
+_dot_log() { [[ -n "$DOTFILES_VERBOSE" ]] && print -r -- "$@"; return 0 }
 
-  # Oh My Zsh Plugins (Optimized order: Shift-Select -> Suggestions -> Highlighting last)
-  plugins=(
-    fzf
-    eza
-    git
-    dotnet
-    docker
-    docker-compose
-    podman
-    kubectl
-    zoxide
-   # zsh-shift-select
-    zsh-autosuggestions
-    zsh-syntax-highlighting
-  )
+# --- dotfiles location (follows the ~/.zshrc symlink) ------------------------
+DOT_FILES_DIR="${${(%):-%x}:A:h}"
+# home-manager links into the read-only /nix/store: keep the unresolved path there
+[[ "$DOT_FILES_DIR" == /nix/store/* ]] && DOT_FILES_DIR="${${(%):-%x}:h}"
+export DOT_FILES_DIR
+_dot_log "DOT_FILES_DIR: $DOT_FILES_DIR"
 
-  # Performance optimizations to eliminate typing delay
-  export ZSH_AUTOSUGGEST_USE_ASYNC=1
-  export ZSH_AUTOSUGGEST_MANUAL_REBIND=1
-  export ZSH_HIGHLIGHT_MAXLENGTH=512
-  export ZSH_HIGHLIGHT_HIGHLIGHTERS=(main)
+# --- oh-my-zsh ---------------------------------------------------------------
+export ZSH="${ZSH:-$HOME/.oh-my-zsh}"
+ZSH_THEME="" # starship draws the prompt
 
-  # Source Oh My Zsh
-  [[ -f "$ZSH/oh-my-zsh.sh" ]] && source "$ZSH/oh-my-zsh.sh"
+plugins=(git)
+for _p in fzf zoxide eza dotnet docker docker-compose podman kubectl helm; do
+  (( $+commands[$_p] )) && plugins+=("$_p")
+done
+unset _p
+# third-party plugins: only if installed (custom/ or a system package with omz)
+for _p in zsh-autosuggestions zsh-syntax-highlighting; do
+  [[ -d "${ZSH_CUSTOM:-$ZSH/custom}/plugins/$_p" || -d "$ZSH/plugins/$_p" ]] && plugins+=("$_p")
+done
+unset _p
 
-  # Resolve dotfiles path
-  DOT_FILES_DIR="$(dirname "${(%):-%x}")"
-  zshrc_real_path=$(realpath "${ZDOTDIR:-$HOME}/.zshrc")
-  if [[ ! "$zshrc_real_path" == /nix/store/* ]]; then
-    DOT_FILES_DIR=$(dirname "$zshrc_real_path")
-  fi
+export ZSH_AUTOSUGGEST_USE_ASYNC=1
+export ZSH_AUTOSUGGEST_MANUAL_REBIND=1
+export ZSH_HIGHLIGHT_MAXLENGTH=512
+export ZSH_HIGHLIGHT_HIGHLIGHTERS=(main)
 
-  echo "DOT_FILES_DIR: $DOT_FILES_DIR"
-  source "$DOT_FILES_DIR/scripts/zsh/utils.zsh"
+[[ -r "$ZSH/oh-my-zsh.sh" ]] && source "$ZSH/oh-my-zsh.sh"
 
-  local args=("$@")
-  local print_scripts_loaded="true"
-  local clear_terminal_on_load="true"
-  print_scripts_loaded=$(get_argument "${args[@]}" "--print-scripts-loaded" "true" "return_value")
-  clear_terminal_on_load=$(get_argument "${args[@]}" "--clear-terminal-on-load" "true" "return_value")
-
-  source ~/.zshenv
-  [[ -f $DOT_FILES_DIR/zsh/environment-variables.zsh ]] && source $DOT_FILES_DIR/zsh/environment-variables.zsh && [[ $print_scripts_loaded == "true" ]] && echo "Environment Variables Loaded"
-  [[ -f $SECRET_ENV_FILE ]] && source $SECRET_ENV_FILE && [[ $print_scripts_loaded == "true" ]] && echo "Secrets env file loaded"
-  [[ -f $DOT_FILES_DIR/zsh/aliases.zsh ]] && source $DOT_FILES_DIR/zsh/aliases.zsh && [[ $print_scripts_loaded == "true" ]] && echo "Aliases loaded"
-  [[ -f $DOT_FILES_DIR/zsh/functions.zsh ]] && source $DOT_FILES_DIR/zsh/functions.zsh && [[ $print_scripts_loaded == "true" ]] && echo "Functions loaded"
-  #[[ -f $DOT_FILES_DIR/zsh/starship.zsh ]] && source $DOT_FILES_DIR/zsh/starship.zsh && [[ $print_scripts_loaded == "true" ]] && echo "Starship loaded"
-  [[ -f $DOT_FILES_DIR/zsh/nvm.zsh ]] && source $DOT_FILES_DIR/zsh/nvm.zsh && [[ $print_scripts_loaded == "true" ]] && echo "Nvm loaded"
-  [[ -f $DOT_FILES_DIR/zsh/keybinds.zsh ]] && source $DOT_FILES_DIR/zsh/keybinds.zsh && [[ $print_scripts_loaded == "true" ]] && echo "Keybinds loaded"
-
-
-  generate_nvim_mson_install_configuration
-
-  # Load Direnv hook
-  if command -v direnv >/dev/null 2>&1; then
-    eval "$(direnv hook zsh)"
-  fi
-
-  create_gcp_dir_if_not_exists
-  create_microsoft_symbolic_link
-  source_zsh_recursive "$DOT_FILES_DIR/zsh/functions"
-
-  if [[ $clear_terminal_on_load == "true" ]]; then
-    clear_terminal
-  fi
-
-  # CodeWhisperer post block. Keep at the bottom of this file.
-  [[ -f "${HOME}/Library/Application Support/codewhisperer/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/codewhisperer/shell/zshrc.post.zsh"
-
-  # Load Angular CLI autocompletion
-  if [ -f /usr/local/lib/node_modules/@angular/cli/bin/ng ]; then
-    source <(/usr/local/lib/node_modules/@angular/cli/bin/ng completion zsh)
-  fi
-
-  export LC_ALL=en_US.utf8
+# --- dotfiles modules --------------------------------------------------------
+_dot_source() {
+  [[ -r "$1" ]] || return 0
+  source "$1" && _dot_log "loaded ${1#$DOT_FILES_DIR/}"
 }
 
-initialize_zsh_environment "$@"
+_dot_source "$DOT_FILES_DIR/scripts/zsh/utils.zsh"
+case "$OSTYPE" in
+  linux*)  _dot_source "$DOT_FILES_DIR/zsh/os/linux.zsh"
+           [[ -r /proc/version ]] && grep -qi 'microsoft\|wsl' /proc/version \
+             && _dot_source "$DOT_FILES_DIR/zsh/os/wsl.zsh" ;;
+  darwin*) _dot_source "$DOT_FILES_DIR/zsh/os/darwin.zsh" ;;
+esac
+_dot_source "$DOT_FILES_DIR/zsh/environment-variables.zsh"
+_dot_source "$DOT_FILES_DIR/zsh/secrets.zsh"   # sops-encrypted, committed
+_dot_source "$SECRET_ENV_FILE"                 # legacy plaintext, gitignored
+_dot_source "$DOT_FILES_DIR/zsh/aliases.zsh"
+_dot_source "$DOT_FILES_DIR/zsh/functions.zsh"
+_dot_source "$DOT_FILES_DIR/zsh/keybinds.zsh"
+source_zsh_recursive "$DOT_FILES_DIR/zsh/functions"
+_dot_source "$HOME/.zshrc.local"               # machine-only, untracked
 
-# Yazi integration
-if command -v yazi >/dev/null 2>&1; then
+generate_nvim_mson_install_configuration
+create_gcp_dir_if_not_exists
+create_microsoft_symbolic_link
+
+# --- tool integrations (each only if installed) ------------------------------
+(( $+commands[direnv] )) && eval "$(direnv hook zsh)"
+(( $+commands[fnm] ))    && eval "$(fnm env --use-on-cd --version-file-strategy=recursive --shell zsh)"
+(( $+commands[ng] ))     && source <(ng completion script 2>/dev/null)
+
+# yazi: `y` opens yazi and cd's to wherever you quit it
+if (( $+commands[yazi] )); then
   function y() {
     local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-    yazi "$@" --cwd-file="$tmp"
-    IFS= read -r -d '' cwd < "$tmp"
-    [ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && builtin cd -- "$cwd"
+    command yazi "$@" --cwd-file="$tmp"
+    IFS= read -r -d '' cwd <"$tmp"
+    [[ -n "$cwd" && "$cwd" != "$PWD" ]] && builtin cd -- "$cwd"
     rm -f -- "$tmp"
   }
 fi
 
-# Zoxide integration
-if command -v zoxide >/dev/null 2>&1; then
-  eval "$(zoxide init zsh)"
-fi
+# prompt: after all plugins, widgets and keymaps are bound
+(( $+commands[starship] )) && eval "$(starship init zsh)"
 
-# Auto-launch herdr (guarded against nested sessions, non-interactive shells, Zellij,
-# and editor-integrated terminals like VS Code, which need a plain shell to hook into)
-if [ -t 1 ] && [[ $- == *i* ]] && [ -z "$ZELLIJ" ] && [ -z "$HERDR_ACTIVE" ] \
-   && [ "$TERM_PROGRAM" != "vscode" ] && [ -z "$VSCODE_INJECTION" ] \
-   && command -v herdr >/dev/null 2>&1; then
-  export HERDR_ACTIVE=1
-  herdr
+# atuin last so its Ctrl-R binding wins
+if (( $+commands[atuin] )); then
+  eval "$(atuin init zsh --disable-up-arrow)"
 fi
-#export STARSHIP_KEYMAP_SELECT=false
-# Always load Starship after all plugins, ZLE widgets, and keymaps are bound
-if command -v starship >/dev/null 2>&1; then
-  eval "$(starship init zsh)"
-fi
-eval "$(fnm env --use-on-cd --shell zsh)"
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-[ -f "$HOME/.atuin/bin/env" ] && . "$HOME/.atuin/bin/env"
-
-eval "$(atuin init zsh --disable-up-arrow)"
