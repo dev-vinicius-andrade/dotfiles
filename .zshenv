@@ -31,7 +31,7 @@ fi
 
 # PATH: unique entries, only directories that exist
 typeset -U path PATH
-for _dir in "$HOME/.atuin/bin" "$HOME/.cargo/bin" "$HOME/.dotnet/tools" "$HOME/go/bin" "$HOME/.local/bin"; do
+for _dir in "$HOME/.bun/bin" "$HOME/.atuin/bin" "$HOME/.cargo/bin" "$HOME/.dotnet/tools" "$HOME/go/bin" "$HOME/.local/bin"; do
   [[ -d "$_dir" ]] && path=("$_dir" $path)
 done
 unset _dir

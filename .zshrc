@@ -76,6 +76,7 @@ create_microsoft_symbolic_link
 (( $+commands[direnv] )) && eval "$(direnv hook zsh)"
 (( $+commands[fnm] ))    && eval "$(fnm env --use-on-cd --version-file-strategy=recursive --shell zsh)"
 (( $+commands[ng] ))     && source <(ng completion script 2>/dev/null)
+[[ -s "$HOME/.bun/_bun" ]] && source "$HOME/.bun/_bun"   # bun completions
 
 # yazi: `y` opens yazi and cd's to wherever you quit it
 if (( $+commands[yazi] )); then
@@ -95,3 +96,4 @@ _dot_source "$DOT_FILES_DIR/zsh/prompt.zsh"
 if (( $+commands[atuin] )); then
   eval "$(atuin init zsh --disable-up-arrow)"
 fi
+
