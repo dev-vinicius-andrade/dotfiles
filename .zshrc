@@ -74,7 +74,7 @@ create_microsoft_symbolic_link
 
 # --- tool integrations (each only if installed) ------------------------------
 (( $+commands[direnv] )) && eval "$(direnv hook zsh)"
-(( $+commands[fnm] ))    && eval "$(fnm env --use-on-cd --version-file-strategy=recursive --shell zsh)"
+(( $+commands[fnm] ))    && eval "$(fnm env --use-on-cd --shell zsh)"   # only switches in dirs with .nvmrc/.node-version
 (( $+commands[ng] ))     && source <(ng completion script 2>/dev/null)
 [[ -s "$HOME/.bun/_bun" ]] && source "$HOME/.bun/_bun"   # bun completions
 
