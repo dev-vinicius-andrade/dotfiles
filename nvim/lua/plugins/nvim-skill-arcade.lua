@@ -1,7 +1,7 @@
 return {
   {
-    "dev-vinicius-andrade/nvim-skill-arcade",
-    url = "git@github.com:dev-vinicius-andrade/nvim-skill-arcade.git", -- repo is private: clone over ssh
+    "andradev-io/nvim-skill-arcade",
+    url = "https://github.com/andradev-io/nvim-skill-arcade.git",
     cmd = {
       "Arcade", "ArcadeMenu", "ArcadeRun", "ArcadeDaily", "ArcadePractice", "ArcadeToggle", "ArcadePause",
       "ArcadePlay", "ArcadeSkip", "ArcadeHint", "ArcadeNext", "ArcadeQuit", "ArcadeStats", "ArcadeSetup",
