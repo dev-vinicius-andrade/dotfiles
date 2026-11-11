@@ -5,7 +5,7 @@ return {
     cmd = {
       "Arcade", "ArcadeMenu", "ArcadeRun", "ArcadeDaily", "ArcadePractice", "ArcadeToggle", "ArcadePause",
       "ArcadePlay", "ArcadeSkip", "ArcadeHint", "ArcadeNext", "ArcadeQuit", "ArcadeStats", "ArcadeSetup",
-      "ArcadeGenerate",
+      "ArcadeGenerate", "ArcadeSync", "ArcadeAI", "ArcadeTry", "ArcadeJoin", "ArcadeLogin", "ArcadeLogout", "ArcadeAccount",
     },
     keys = {
       { "<leader>Gm", "<cmd>ArcadeMenu<cr>", desc = "Arcade: menu" },
