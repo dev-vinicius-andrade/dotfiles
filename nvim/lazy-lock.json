@@ -37,7 +37,7 @@
   "nvim-lsp-file-operations": { "branch": "master", "commit": "a7ac3f9c828c12ec022551a757217759c0d7f97c" },
   "nvim-lspconfig": { "branch": "master", "commit": "443d92c6bea761ab54cdde46fb197a2b4d614bdd" },
   "nvim-nio": { "branch": "master", "commit": "edcc181a875301dd21840189aa2f2f9ad69fc172" },
-  "nvim-skill-arcade": { "branch": "main", "commit": "d8a2e442776294520698ff4d17b46c99ee12b069" },
+  "nvim-skill-arcade": { "branch": "main", "commit": "7c04058b4031bff754b76ca80ca72415b0d60bf9" },
   "nvim-sops": { "branch": "main", "commit": "1791eec21e78c9736ae504f02712a2f509c69b2c" },
   "nvim-spectre": { "branch": "master", "commit": "72f56f7585903cd7bf92c665351aa585e150af0f" },
   "nvim-surround": { "branch": "main", "commit": "2e93e154de9ff326def6480a4358bfc149d5da2c" },
