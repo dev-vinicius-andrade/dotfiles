@@ -1,0 +1,6 @@
+# Ovis settings (read by the herdr plugin, not by the shell).
+# Main listener stays on 127.0.0.1:7317. Phones come in through pfSense HAProxy
+# (ovis.homel4b.dev, LAN + WireGuard only) -> TLS -> this LAN HTTPS listener.
+# It admits private-IPv4 peers only, and only with a paired device or the token.
+OVIS_LAN_HTTPS_PORT=7318
+OVIS_LAN_HTTPS_HOST=10.10.10.10
