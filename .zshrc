@@ -97,3 +97,10 @@ if (( $+commands[atuin] )); then
   eval "$(atuin init zsh --disable-up-arrow)"
 fi
 
+
+if [[ -r "$HOME/dotfiles/secrets/env.sops.env" ]]; then
+  set -a
+  source <(sops decrypt "$HOME/dotfiles/secrets/env.sops.env")
+  set +a
+fi
+

@@ -38,3 +38,9 @@ unset _dir
 
 # Machine-specific overrides (untracked)
 [[ -r "$HOME/.zshenv.local" ]] && . "$HOME/.zshenv.local"
+
+if [[ -r "$HOME/dotfiles/secrets/env.sops.env" ]]; then
+  set -a
+  source <(sops decrypt "$HOME/dotfiles/secrets/env.sops.env")
+  set +a
+fi
