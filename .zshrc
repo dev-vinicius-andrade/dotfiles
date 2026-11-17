@@ -104,3 +104,6 @@ if [[ -r "$HOME/dotfiles/secrets/env.sops.env" ]]; then
   set +a
 fi
 
+
+# Obsidian AI vault path
+export VAULT_DIR="/root/repos/github/dev-vinicius-andrade/ai-vault"
