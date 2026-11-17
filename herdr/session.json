@@ -1,0 +1,70 @@
+{
+  "version": 3,
+  "workspaces": [
+    {
+      "id": "w8",
+      "custom_name": null,
+      "identity_cwd": "/root",
+      "public_pane_numbers": {
+        "24": 1
+      },
+      "next_public_pane_number": 2,
+      "public_tab_numbers": [
+        1
+      ],
+      "next_public_tab_number": 2,
+      "tabs": [
+        {
+          "custom_name": null,
+          "layout": {
+            "Pane": 24
+          },
+          "panes": {
+            "24": {
+              "cwd": "/root"
+            }
+          },
+          "zoomed": false,
+          "focused": 24,
+          "root_pane": 24
+        }
+      ],
+      "active_tab": 0
+    },
+    {
+      "id": "w9",
+      "custom_name": "repos",
+      "identity_cwd": "/root/repos/github/dev-vinicius-andrade",
+      "public_pane_numbers": {
+        "25": 1
+      },
+      "next_public_pane_number": 2,
+      "public_tab_numbers": [
+        1
+      ],
+      "next_public_tab_number": 2,
+      "tabs": [
+        {
+          "custom_name": "claude remote-control --name nvim-skill-arcade-challenges",
+          "layout": {
+            "Pane": 25
+          },
+          "panes": {
+            "25": {
+              "cwd": "/root/repos/github/dev-vinicius-andrade"
+            }
+          },
+          "zoomed": false,
+          "focused": 25,
+          "root_pane": 25
+        }
+      ],
+      "active_tab": 0
+    }
+  ],
+  "active": 1,
+  "selected": 1,
+  "sidebar_width": null,
+  "sidebar_section_split": null,
+  "collapsed_space_keys": []
+}

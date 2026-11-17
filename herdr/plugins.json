@@ -1,0 +1,1154 @@
+[
+  {
+    "plugin_id": "devswha.ovis",
+    "name": "Ovis",
+    "version": "0.5.0",
+    "min_herdr_version": "0.9.0",
+    "description": "Ovis, the browser and phone client for herdr: chat and live terminal for every agent pane, remote PCs over SSH, web push alerts",
+    "manifest_path": "/root/dotfiles/herdr/plugins/github-installations/devswha.ovis-aa47ee43150f/245885-0/checkout/herdr-plugin.toml",
+    "plugin_root": "/root/dotfiles/herdr/plugins/github-installations/devswha.ovis-aa47ee43150f/245885-0/checkout",
+    "enabled": true,
+    "platforms": [
+      "linux",
+      "macos",
+      "windows"
+    ],
+    "build": [
+      {
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "command": [
+          "sh",
+          "scripts/preflight.sh"
+        ]
+      },
+      {
+        "platforms": [
+          "windows"
+        ],
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-NonInteractive",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "scripts/preflight.ps1"
+        ]
+      },
+      {
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "command": [
+          "sh",
+          "scripts/with-bun.sh",
+          "install"
+        ]
+      },
+      {
+        "platforms": [
+          "windows"
+        ],
+        "command": [
+          "bun",
+          "install"
+        ]
+      },
+      {
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "command": [
+          "sh",
+          "scripts/with-bun.sh",
+          "run",
+          "build"
+        ]
+      },
+      {
+        "platforms": [
+          "windows"
+        ],
+        "command": [
+          "bun",
+          "run",
+          "build"
+        ]
+      },
+      {
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "command": [
+          "sh",
+          "scripts/with-bun.sh",
+          "scripts/pty-sidecar.ts",
+          "install"
+        ]
+      }
+    ],
+    "startup": [
+      {
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "command": [
+          "sh",
+          "scripts/with-bun.sh",
+          "scripts/plugin.ts",
+          "start"
+        ]
+      },
+      {
+        "platforms": [
+          "windows"
+        ],
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "scripts/plugin.ps1",
+          "start"
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "phone",
+        "title": "Phone setup",
+        "contexts": [
+          "workspace"
+        ],
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "command": [
+          "herdr",
+          "plugin",
+          "pane",
+          "open",
+          "--plugin",
+          "devswha.ovis",
+          "--entrypoint",
+          "phone",
+          "--placement",
+          "zoomed",
+          "--focus"
+        ]
+      },
+      {
+        "id": "phone-windows",
+        "title": "Phone setup",
+        "contexts": [
+          "workspace"
+        ],
+        "platforms": [
+          "windows"
+        ],
+        "command": [
+          "herdr",
+          "plugin",
+          "pane",
+          "open",
+          "--plugin",
+          "devswha.ovis",
+          "--entrypoint",
+          "phone-windows",
+          "--placement",
+          "zoomed",
+          "--focus"
+        ]
+      },
+      {
+        "id": "start",
+        "title": "Start Ovis",
+        "contexts": [
+          "workspace"
+        ],
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "command": [
+          "sh",
+          "scripts/with-bun.sh",
+          "scripts/plugin.ts",
+          "start"
+        ]
+      },
+      {
+        "id": "start-windows",
+        "title": "Start Ovis",
+        "contexts": [
+          "workspace"
+        ],
+        "platforms": [
+          "windows"
+        ],
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "scripts/plugin.ps1",
+          "start"
+        ]
+      },
+      {
+        "id": "status",
+        "title": "Ovis status",
+        "contexts": [
+          "workspace"
+        ],
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "command": [
+          "sh",
+          "scripts/with-bun.sh",
+          "scripts/plugin.ts",
+          "status"
+        ]
+      },
+      {
+        "id": "status-windows",
+        "title": "Ovis status",
+        "contexts": [
+          "workspace"
+        ],
+        "platforms": [
+          "windows"
+        ],
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "scripts/plugin.ps1",
+          "status"
+        ]
+      },
+      {
+        "id": "stop",
+        "title": "Stop Ovis",
+        "contexts": [
+          "workspace"
+        ],
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "command": [
+          "sh",
+          "scripts/with-bun.sh",
+          "scripts/plugin.ts",
+          "stop"
+        ]
+      },
+      {
+        "id": "stop-windows",
+        "title": "Stop Ovis",
+        "contexts": [
+          "workspace"
+        ],
+        "platforms": [
+          "windows"
+        ],
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "scripts/plugin.ps1",
+          "stop"
+        ]
+      }
+    ],
+    "panes": [
+      {
+        "id": "phone",
+        "title": "Phone setup",
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "placement": "zoomed",
+        "command": [
+          "sh",
+          "scripts/with-bun.sh",
+          "scripts/plugin.ts",
+          "phone-setup"
+        ]
+      },
+      {
+        "id": "phone-windows",
+        "title": "Phone setup",
+        "platforms": [
+          "windows"
+        ],
+        "placement": "zoomed",
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "scripts/plugin.ps1",
+          "phone-setup"
+        ]
+      }
+    ],
+    "source": {
+      "kind": "github",
+      "owner": "devswha",
+      "repo": "ovis",
+      "requested_ref": "v0.5.0",
+      "resolved_commit": "347a989d1c2c71ab273c1a6d9c900054568f97b8",
+      "managed_path": "/root/.config/herdr/plugins/github-installations/devswha.ovis-aa47ee43150f/245885-0/checkout",
+      "installed_unix_ms": 1794033814449
+    }
+  },
+  {
+    "plugin_id": "furkankly.zoetrope",
+    "name": "zoetrope",
+    "version": "0.1.0",
+    "min_herdr_version": "0.8.2",
+    "description": "Watch the focused agent's session as a live flow graph.",
+    "manifest_path": "/root/dotfiles/herdr/plugins/github-installations/furkankly.zoetrope-452e176858b2/1151019-0/checkout/herdr-plugin/herdr-plugin.toml",
+    "plugin_root": "/root/dotfiles/herdr/plugins/github-installations/furkankly.zoetrope-452e176858b2/1151019-0/checkout/herdr-plugin",
+    "enabled": true,
+    "platforms": [
+      "macos",
+      "linux"
+    ],
+    "build": [
+      {
+        "command": [
+          "bash",
+          "herdr/ensure-zoe.sh"
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "open",
+        "title": "zoetrope: session graph (overlay)",
+        "description": "Open the focused agent's session as a flow graph, over the focused pane. Closing it restores your layout. This is what the default key does.",
+        "contexts": [
+          "pane",
+          "workspace"
+        ],
+        "command": [
+          "bash",
+          "herdr/pane.sh",
+          "open"
+        ]
+      },
+      {
+        "id": "open-split",
+        "title": "zoetrope: session graph (split)",
+        "description": "Open the focused agent's session as a flow graph, split beside the focused pane. Stays until you close it.",
+        "contexts": [
+          "pane",
+          "workspace"
+        ],
+        "command": [
+          "bash",
+          "herdr/pane.sh",
+          "open",
+          "split"
+        ]
+      },
+      {
+        "id": "open-tab",
+        "title": "zoetrope: session graph (tab)",
+        "description": "Open the focused agent's session as a flow graph in its own tab. Full size, one tab switch from the agent.",
+        "contexts": [
+          "pane",
+          "workspace"
+        ],
+        "command": [
+          "bash",
+          "herdr/pane.sh",
+          "open",
+          "tab"
+        ]
+      },
+      {
+        "id": "remove-keys",
+        "title": "zoetrope: remove the default keybinding",
+        "description": "Delete the block setup-keys wrote.",
+        "contexts": [
+          "workspace"
+        ],
+        "command": [
+          "bash",
+          "herdr/keys.sh",
+          "remove"
+        ]
+      },
+      {
+        "id": "setup-keys",
+        "title": "zoetrope: install the default keybinding",
+        "description": "Bind prefix+shift+z to the overlay, and write the split and tab placements beside it as comments. One block in your Herdr config, backed up first.",
+        "contexts": [
+          "workspace"
+        ],
+        "command": [
+          "bash",
+          "herdr/keys.sh",
+          "setup"
+        ]
+      }
+    ],
+    "panes": [
+      {
+        "id": "graph",
+        "title": "zoetrope",
+        "placement": "overlay",
+        "command": [
+          "bash",
+          "herdr/open.sh"
+        ]
+      }
+    ],
+    "source": {
+      "kind": "github",
+      "owner": "furkankly",
+      "repo": "zoetrope",
+      "subdir": "herdr-plugin",
+      "resolved_commit": "b1f31dd26bd4e9e513885e39edb78d0850a5d1fe",
+      "managed_path": "/root/.config/herdr/plugins/github-installations/furkankly.zoetrope-452e176858b2/1151019-0/checkout",
+      "installed_unix_ms": 1794230909628
+    }
+  },
+  {
+    "plugin_id": "herdr-bar",
+    "name": "Bar",
+    "version": "0.14.0",
+    "min_herdr_version": "0.9.0",
+    "description": "Cmd+K command bar with agent icons, fuzzy search, and optional automatic tab titles",
+    "manifest_path": "/root/dotfiles/herdr/plugins/github-installations/herdr-bar-96eebe452a9c/1150807-0/checkout/herdr-plugin.toml",
+    "plugin_root": "/root/dotfiles/herdr/plugins/github-installations/herdr-bar-96eebe452a9c/1150807-0/checkout",
+    "enabled": true,
+    "platforms": [
+      "linux",
+      "macos",
+      "windows"
+    ],
+    "build": [
+      {
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "command": [
+          "sh",
+          "scripts/install.sh"
+        ]
+      },
+      {
+        "platforms": [
+          "windows"
+        ],
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "scripts/install.ps1"
+        ]
+      }
+    ],
+    "startup": [
+      {
+        "command": [
+          "bin/herdr-bar",
+          "--start-titles"
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "open",
+        "title": "Open bar",
+        "description": "Fuzzy-jump to any tab, pane, or agent",
+        "contexts": [
+          "global"
+        ],
+        "command": [
+          "bin/herdr-bar",
+          "--open"
+        ]
+      },
+      {
+        "id": "open-windows",
+        "title": "Open bar",
+        "description": "Fuzzy-jump to any tab, pane, or agent",
+        "contexts": [
+          "global"
+        ],
+        "platforms": [
+          "windows"
+        ],
+        "command": [
+          "bin/herdr-bar.exe",
+          "--open"
+        ]
+      },
+      {
+        "id": "start-titles",
+        "title": "Start tab watcher",
+        "description": "Start task title and tab status updates enabled in the plugin config",
+        "contexts": [
+          "global"
+        ],
+        "command": [
+          "bin/herdr-bar",
+          "--start-titles",
+          "--resume"
+        ]
+      },
+      {
+        "id": "stop-titles",
+        "title": "Stop tab watcher",
+        "description": "Stop this server's title and status watcher, restoring bare tab names",
+        "contexts": [
+          "global"
+        ],
+        "command": [
+          "bin/herdr-bar",
+          "--stop-titles"
+        ]
+      }
+    ],
+    "events": [
+      {
+        "on": "pane.agent_detected",
+        "command": [
+          "bin/herdr-bar",
+          "--start-titles"
+        ]
+      }
+    ],
+    "panes": [
+      {
+        "id": "bar",
+        "title": "Bar",
+        "description": "Fuzzy-jump to any tab, pane, or agent",
+        "placement": "popup",
+        "width": "74%",
+        "height": "62%",
+        "command": [
+          "bin/herdr-bar"
+        ]
+      }
+    ],
+    "source": {
+      "kind": "github",
+      "owner": "jeffarese",
+      "repo": "herdr-bar",
+      "resolved_commit": "d9cdd88cb734615e96b1c37ed17fc39be904f060",
+      "managed_path": "/root/.config/herdr/plugins/github-installations/herdr-bar-96eebe452a9c/1150807-0/checkout",
+      "installed_unix_ms": 1794230890623
+    }
+  },
+  {
+    "plugin_id": "herdr-navigator",
+    "name": "Herdr Navigator",
+    "version": "0.3.6",
+    "min_herdr_version": "0.7.3",
+    "description": "Jump to any Herdr workspace, agent, project, session, remote, directory, or action from one fuzzy navigator.",
+    "manifest_path": "/root/dotfiles/herdr/plugins/github-installations/herdr-navigator-3a5a6fa5dfb5/220704-0/checkout/herdr-plugin.toml",
+    "plugin_root": "/root/dotfiles/herdr/plugins/github-installations/herdr-navigator-3a5a6fa5dfb5/220704-0/checkout",
+    "enabled": true,
+    "platforms": [
+      "linux",
+      "macos"
+    ],
+    "build": [
+      {
+        "command": [
+          "cargo",
+          "build",
+          "--release"
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "jump-back",
+        "title": "Herdr Navigator: jump back",
+        "contexts": [
+          "workspace",
+          "global"
+        ],
+        "command": [
+          "./target/release/herdr-navigator",
+          "jump-back"
+        ]
+      },
+      {
+        "id": "open",
+        "title": "Herdr Navigator: open",
+        "contexts": [
+          "workspace",
+          "global"
+        ],
+        "command": [
+          "./target/release/herdr-navigator",
+          "open"
+        ]
+      },
+      {
+        "id": "open-side",
+        "title": "Herdr Navigator: side pane",
+        "contexts": [
+          "workspace",
+          "global"
+        ],
+        "command": [
+          "./target/release/herdr-navigator",
+          "open-side"
+        ]
+      }
+    ],
+    "panes": [
+      {
+        "id": "picker",
+        "title": "Herdr Navigator",
+        "placement": "overlay",
+        "command": [
+          "./target/release/herdr-navigator",
+          "ui"
+        ]
+      },
+      {
+        "id": "picker-side",
+        "title": "Navigator Side",
+        "placement": "split",
+        "command": [
+          "./target/release/herdr-navigator",
+          "ui",
+          "--side"
+        ]
+      }
+    ],
+    "source": {
+      "kind": "github",
+      "owner": "thanhdat77",
+      "repo": "herdr-navigator",
+      "resolved_commit": "313b753b1f98f802b7d861430a13cb95a86e8dd3",
+      "managed_path": "/root/.config/herdr/plugins/github-installations/herdr-navigator-3a5a6fa5dfb5/220704-0/checkout",
+      "installed_unix_ms": 1794031573127
+    }
+  },
+  {
+    "plugin_id": "herdr-nvim-nav",
+    "name": "Vim Nav",
+    "version": "0.1.0",
+    "min_herdr_version": "0.7.0",
+    "description": "Ctrl+h/j/k/l across herdr panes and Neovim splits, without a per-key process for detection",
+    "manifest_path": "/root/dotfiles/herdr/plugins/github-installations/herdr-nvim-nav-37d546a0d32b/220489-0/checkout/herdr-plugin.toml",
+    "plugin_root": "/root/dotfiles/herdr/plugins/github-installations/herdr-nvim-nav-37d546a0d32b/220489-0/checkout",
+    "enabled": true,
+    "platforms": [
+      "macos",
+      "linux"
+    ],
+    "build": [
+      {
+        "platforms": [
+          "macos",
+          "linux"
+        ],
+        "command": [
+          "cc",
+          "-O2",
+          "-o",
+          "herdr-nvim-nav",
+          "herdr-nvim-nav.c"
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "down",
+        "title": "Navigate down",
+        "contexts": [
+          "global"
+        ],
+        "command": [
+          "./herdr-nvim-nav",
+          "down"
+        ]
+      },
+      {
+        "id": "left",
+        "title": "Navigate left",
+        "contexts": [
+          "global"
+        ],
+        "command": [
+          "./herdr-nvim-nav",
+          "left"
+        ]
+      },
+      {
+        "id": "right",
+        "title": "Navigate right",
+        "contexts": [
+          "global"
+        ],
+        "command": [
+          "./herdr-nvim-nav",
+          "right"
+        ]
+      },
+      {
+        "id": "up",
+        "title": "Navigate up",
+        "contexts": [
+          "global"
+        ],
+        "command": [
+          "./herdr-nvim-nav",
+          "up"
+        ]
+      }
+    ],
+    "source": {
+      "kind": "github",
+      "owner": "aimdevlee",
+      "repo": "herdr-nvim-nav",
+      "resolved_commit": "ec047fd6d8d0269d54a34e9405af28d8aad4c8f0",
+      "managed_path": "/root/.config/herdr/plugins/github-installations/herdr-nvim-nav-37d546a0d32b/220489-0/checkout",
+      "installed_unix_ms": 1794031542315
+    }
+  },
+  {
+    "plugin_id": "herdr-sidebar",
+    "name": "herdr-sidebar",
+    "version": "0.15.1",
+    "min_herdr_version": "0.8.0",
+    "description": "VS Code-style sidebar: file explorer + source control (with ✧ AI commit messages) in one herdr pane.",
+    "manifest_path": "/root/dotfiles/herdr/plugins/github-installations/herdr-sidebar-7ff2582a7c8a/1150876-0/checkout/plugins/herdr-sidebar/herdr-plugin.toml",
+    "plugin_root": "/root/dotfiles/herdr/plugins/github-installations/herdr-sidebar-7ff2582a7c8a/1150876-0/checkout/plugins/herdr-sidebar",
+    "enabled": true,
+    "platforms": [
+      "linux",
+      "macos",
+      "windows"
+    ],
+    "build": [
+      {
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "command": [
+          "/bin/sh",
+          "scripts/fetch-or-build.sh"
+        ]
+      },
+      {
+        "platforms": [
+          "windows"
+        ],
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "scripts/fetch-or-build.ps1"
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "open-git",
+        "title": "Toggle source control",
+        "description": "Open a separate Source Control pane (focus it if open; close it if focused).",
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "command": [
+          "./target/release/herdr-sidebar",
+          "--toggle-git"
+        ]
+      },
+      {
+        "id": "open-git-windows",
+        "title": "Toggle source control",
+        "description": "Open a separate Source Control pane (focus it if open; close it if focused).",
+        "platforms": [
+          "windows"
+        ],
+        "command": [
+          ".\\target\\release\\herdr-sidebar-ensure.exe",
+          "--toggle-git"
+        ]
+      },
+      {
+        "id": "open-sidebar",
+        "title": "Toggle sidebar",
+        "description": "Open the sidebar at its configured dock edge (focus it if open; close it if focused).",
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "command": [
+          "./target/release/herdr-sidebar",
+          "--toggle"
+        ]
+      },
+      {
+        "id": "open-sidebar-windows",
+        "title": "Toggle sidebar",
+        "description": "Open the sidebar at its configured dock edge (focus it if open; close it if focused).",
+        "platforms": [
+          "windows"
+        ],
+        "command": [
+          ".\\target\\release\\herdr-sidebar-ensure.exe",
+          "--toggle"
+        ]
+      },
+      {
+        "id": "quick-open",
+        "title": "Quick Open",
+        "description": "Open or focus the sidebar and show the file picker.",
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "command": [
+          "./target/release/herdr-sidebar",
+          "--quick-open"
+        ]
+      },
+      {
+        "id": "quick-open-windows",
+        "title": "Quick Open",
+        "description": "Open or focus the sidebar and show the file picker.",
+        "platforms": [
+          "windows"
+        ],
+        "command": [
+          ".\\target\\release\\herdr-sidebar-ensure.exe",
+          "--quick-open"
+        ]
+      },
+      {
+        "id": "redeploy",
+        "title": "Redeploy sidebar panes",
+        "description": "Close all sidebar panes in every workspace so they respawn on the latest build.",
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "command": [
+          "bash",
+          "scripts/redeploy.sh"
+        ]
+      },
+      {
+        "id": "redeploy-windows",
+        "title": "Redeploy sidebar panes",
+        "description": "Close all sidebar panes in every workspace so they respawn on the latest build.",
+        "platforms": [
+          "windows"
+        ],
+        "command": [
+          "powershell",
+          "-NoProfile",
+          "-ExecutionPolicy",
+          "Bypass",
+          "-File",
+          "scripts/redeploy.ps1"
+        ]
+      },
+      {
+        "id": "refresh-sidebars",
+        "title": "Refresh all sidebars",
+        "description": "Refresh running sidebar views without closing preview or editor panes.",
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "command": [
+          "./target/release/herdr-sidebar",
+          "--refresh-sidebars"
+        ]
+      },
+      {
+        "id": "refresh-sidebars-windows",
+        "title": "Refresh all sidebars",
+        "description": "Refresh running sidebar views without closing preview or editor panes.",
+        "platforms": [
+          "windows"
+        ],
+        "command": [
+          ".\\target\\release\\herdr-sidebar-ensure.exe",
+          "--refresh-sidebars"
+        ]
+      },
+      {
+        "id": "show-explorer",
+        "title": "Show Explorer",
+        "description": "Open or focus the sidebar and switch to Explorer.",
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "command": [
+          "./target/release/herdr-sidebar",
+          "--show-explorer"
+        ]
+      },
+      {
+        "id": "show-explorer-windows",
+        "title": "Show Explorer",
+        "description": "Open or focus the sidebar and switch to Explorer.",
+        "platforms": [
+          "windows"
+        ],
+        "command": [
+          ".\\target\\release\\herdr-sidebar-ensure.exe",
+          "--show-explorer"
+        ]
+      },
+      {
+        "id": "show-git",
+        "title": "Show Source Control",
+        "description": "Open or focus the sidebar and switch to Source Control.",
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "command": [
+          "./target/release/herdr-sidebar",
+          "--show-git"
+        ]
+      },
+      {
+        "id": "show-git-windows",
+        "title": "Show Source Control",
+        "description": "Open or focus the sidebar and switch to Source Control.",
+        "platforms": [
+          "windows"
+        ],
+        "command": [
+          ".\\target\\release\\herdr-sidebar-ensure.exe",
+          "--show-git"
+        ]
+      },
+      {
+        "id": "show-search",
+        "title": "Show Search",
+        "description": "Open or focus the sidebar and switch to project text search.",
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "command": [
+          "./target/release/herdr-sidebar",
+          "--show-search"
+        ]
+      },
+      {
+        "id": "show-search-windows",
+        "title": "Show Search",
+        "description": "Open or focus the sidebar and switch to project text search.",
+        "platforms": [
+          "windows"
+        ],
+        "command": [
+          ".\\target\\release\\herdr-sidebar-ensure.exe",
+          "--show-search"
+        ]
+      },
+      {
+        "id": "update",
+        "title": "Update sidebar",
+        "description": "Install the latest stable release and refresh sidebar panes; preserve previews.",
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "command": [
+          "./target/release/herdr-sidebar",
+          "--update-latest"
+        ]
+      },
+      {
+        "id": "update-windows",
+        "title": "Update sidebar",
+        "description": "Install the latest stable release and refresh sidebar panes; preserve previews.",
+        "platforms": [
+          "windows"
+        ],
+        "command": [
+          ".\\target\\release\\herdr-sidebar-ensure.exe",
+          "--update-latest"
+        ]
+      }
+    ],
+    "events": [
+      {
+        "on": "pane.focused",
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "command": [
+          "./target/release/herdr-sidebar",
+          "--ensure"
+        ]
+      },
+      {
+        "on": "pane.focused",
+        "platforms": [
+          "windows"
+        ],
+        "command": [
+          ".\\target\\release\\herdr-sidebar-ensure.exe"
+        ]
+      },
+      {
+        "on": "tab.created",
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "command": [
+          "./target/release/herdr-sidebar",
+          "--ensure"
+        ]
+      },
+      {
+        "on": "tab.created",
+        "platforms": [
+          "windows"
+        ],
+        "command": [
+          ".\\target\\release\\herdr-sidebar-ensure.exe"
+        ]
+      },
+      {
+        "on": "tab.focused",
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "command": [
+          "./target/release/herdr-sidebar",
+          "--ensure"
+        ]
+      },
+      {
+        "on": "tab.focused",
+        "platforms": [
+          "windows"
+        ],
+        "command": [
+          ".\\target\\release\\herdr-sidebar-ensure.exe"
+        ]
+      },
+      {
+        "on": "workspace.created",
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "command": [
+          "./target/release/herdr-sidebar",
+          "--ensure"
+        ]
+      },
+      {
+        "on": "workspace.created",
+        "platforms": [
+          "windows"
+        ],
+        "command": [
+          ".\\target\\release\\herdr-sidebar-ensure.exe"
+        ]
+      },
+      {
+        "on": "workspace.focused",
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "command": [
+          "./target/release/herdr-sidebar",
+          "--ensure"
+        ]
+      },
+      {
+        "on": "workspace.focused",
+        "platforms": [
+          "windows"
+        ],
+        "command": [
+          ".\\target\\release\\herdr-sidebar-ensure.exe"
+        ]
+      }
+    ],
+    "panes": [
+      {
+        "id": "sidebar",
+        "title": "Sidebar",
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "placement": "split",
+        "command": [
+          "./target/release/herdr-sidebar"
+        ]
+      },
+      {
+        "id": "source-control",
+        "title": "Source Control",
+        "platforms": [
+          "linux",
+          "macos"
+        ],
+        "placement": "split",
+        "command": [
+          "./target/release/herdr-sidebar",
+          "--view",
+          "git"
+        ]
+      }
+    ],
+    "source": {
+      "kind": "github",
+      "owner": "alexarthurs",
+      "repo": "herdr-sidebar",
+      "subdir": "plugins/herdr-sidebar",
+      "resolved_commit": "081ed133f3faa377438b51ce435fe8a87c439593",
+      "managed_path": "/root/.config/herdr/plugins/github-installations/herdr-sidebar-7ff2582a7c8a/1150876-0/checkout",
+      "installed_unix_ms": 1794230892303
+    }
+  }
+]
