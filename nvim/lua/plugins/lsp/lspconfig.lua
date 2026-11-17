@@ -14,9 +14,6 @@ local function set_keymaps_on_lsp_attach(ev)
 		{ "<leader>ca", vim.lsp.buf.code_action, "See available code actions" },
 		{ "<leader>rn", vim.lsp.buf.rename, "Smart rename" },
 		{ "<leader>D", "<cmd>Telescope diagnostics bufnr=0<CR>", "Show buffer diagnostics" },
-		{ "<leader>d", vim.diagnostic.open_float, "Show line diagnostics" },
-		{ "[d", vim.diagnostic.goto_prev, "Go to previous diagnostic" },
-		{ "]d", vim.diagnostic.goto_next, "Go to next diagnostic" },
 		{ "K", vim.lsp.buf.hover, "Show documentation for what is under cursor" },
 		{ "<leader>rs", ":LspRestart<CR>", "Restart LSP" },
 	}
@@ -27,51 +24,31 @@ local function set_keymaps_on_lsp_attach(ev)
 	end
 end
 
+-- Every file in lua/plugins/lsp/servers/<name>.lua returns a vim.lsp.config table for <name>.
 local function load_lsp_servers()
 	local servers = {}
-	local scandir = vim.loop.fs_scandir("path/to/your/nvim/config/plugins/lsp/servers")
-	if scandir then
-		while true do
-			local file, filetype = vim.loop.fs_scandir_next(scandir)
-			if not file then break end
-			if filetype == "file" and file:match("%.lua$") then
-				local server_name = file:gsub("%.lua$", "")
-				local server_config = require("plugins.lsp.servers." .. server_name)
-				servers[server_name] = server_config
-			end
+	local dir = vim.fn.stdpath("config") .. "/lua/plugins/lsp/servers"
+	for name, kind in vim.fs.dir(dir) do
+		if kind == "file" and name:match("%.lua$") then
+			local server_name = name:gsub("%.lua$", "")
+			servers[server_name] = require("plugins.lsp.servers." .. server_name)
 		end
 	end
 	return servers
 end
 
-local function configure_lsp_servers(capabilities, lspconfig)
-	local servers = load_lsp_servers()
- --  {
-	-- 	emmet_ls = require("plugins.lsp.servers.emmet_ls"),
-	-- 	graphql = require("plugins.lsp.servers.graphql"),
-	-- 	lua_ls = require("plugins.lsp.servers.lua_ls"),
-	-- 	omnisharp = require("plugins.lsp.servers.omnisharp"),
-	-- 	omnisharp_mono = require("plugins.lsp.servers.omnisharp_mono"),
-	-- 	svelte = require("plugins.lsp.servers.svelte"),
-	-- }
-	local mason_lspconfig = require("mason-lspconfig")
-	mason_lspconfig.setup({
-		handlers = {
-			function(server_name)
-				local server = servers[server_name] or {}
-				server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-				if server_name == "omnisharp_mono" then
-					return
-				end
-
-				lspconfig[server_name].setup(server)
-			end,
-		},
-	})
+-- Neovim >= 0.11 native LSP config. Enabling (vim.lsp.enable) is done by
+-- mason-lspconfig in mason.lua; this only registers the settings, which apply
+-- to every client started afterwards.
+local function configure_lsp_servers(capabilities)
+	vim.lsp.config("*", { capabilities = capabilities })
+	for server_name, server in pairs(load_lsp_servers()) do
+		vim.lsp.config(server_name, server)
+	end
 end
 
 return {
-	"neovim/nvim-lspconfig",
+	"neovim/nvim-lspconfig", -- still provides the default server configs (cmd, filetypes, root markers)
 	event = { "BufReadPre", "BufNewFile" },
 	dependencies = {
 		"hrsh7th/cmp-nvim-lsp",
@@ -80,17 +57,20 @@ return {
 			config = true,
 		},
 		{
-			"folke/neodev.nvim",
-			opts = {},
+			"folke/lazydev.nvim", -- replaces the archived neodev.nvim
+			ft = "lua",
+			opts = {
+				library = { { path = "${3rd}/luv/library", words = { "vim%.uv" } } },
+			},
 		},
 	},
 	config = function()
-		local lspconfig = require("lspconfig")
-		local mason = require("mason")
-		local capabilities = vim.lsp.protocol.make_client_capabilities()
-		capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
-		mason.setup()
-		configure_lsp_servers(capabilities, lspconfig)
+		local capabilities = vim.tbl_deep_extend(
+			"force",
+			vim.lsp.protocol.make_client_capabilities(),
+			require("cmp_nvim_lsp").default_capabilities()
+		)
+		configure_lsp_servers(capabilities)
 		vim.api.nvim_create_autocmd("LspAttach", {
 			group = vim.api.nvim_create_augroup("UserLspConfig", {}),
 			callback = set_keymaps_on_lsp_attach,

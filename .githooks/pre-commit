@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Blocks commits that contain secrets. Enabled by: git config core.hooksPath .githooks
+# (init.sh / install.ps1 do this). Bypass ONLY for a verified false positive: git commit --no-verify
+set -uo pipefail
+
+if command -v gitleaks >/dev/null 2>&1; then
+  exec gitleaks git --pre-commit --staged --redact --no-banner --config "$(git rev-parse --show-toplevel)/.gitleaks.toml"
+fi
+
+# Fallback when gitleaks isn't installed: a crude check of staged additions for
+# KEY/TOKEN/SECRET/PASSWORD assignments with a literal value.
+echo "pre-commit: gitleaks not found, using a basic check (install gitleaks for real scanning)" >&2
+hits=$(git diff --cached -U0 --no-color -- . ':(exclude)secrets/*.sops.*' ':(exclude).gitleaks.toml' \
+  | grep -E '^\+' | grep -vE '^\+\+\+' \
+  | grep -iE '(token|secret|passw(or)?d|api[_-]?key|private[_-]?key)[a-z_]*["'"'"']?\s*[:=]\s*["'"'"']?[A-Za-z0-9+/=_.@!-]{12,}' \
+  | grep -vE '\$\{?[A-Za-z_]|ENC\[AES256_GCM')
+if [[ -n "$hits" ]]; then
+  echo "pre-commit: possible secret in staged changes:" >&2
+  echo "$hits" | sed -E 's/([:=]\s*["'"'"']?.{4}).*/\1…<redacted>/' >&2
+  echo "Move it to secrets/env.sops.env (run: secrets_edit). Override with --no-verify if this is a false positive." >&2
+  exit 1
+fi

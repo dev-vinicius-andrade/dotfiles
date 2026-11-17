@@ -1,13 +1,5 @@
 local keymap = vim.keymap
 
-local function number_increment_decrement_keymaps()
-    keymap.set("n", "<leader>+", "<C-a>", {
-        desc = "Increment number"
-    })
-    keymap.set("n", "<leader>-", "<C-x>", {
-        desc = "Decrement number"
-    })
-end
 local function split_windows_keymaps()
     keymap.set("n", "<leader>sv", "<C-w>v", {
         desc = "Split window vertically"
@@ -79,14 +71,15 @@ local function move_content_up_and_down_keymaps()
     keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 end
 local function diagnostics_keymaps()
-    keymap.set("n", "[d", vim.diagnostic.goto_prev, {
+    -- global (also for nvim-lint diagnostics in buffers without an LSP)
+    keymap.set("n", "[d", function() vim.diagnostic.jump({ count = -1, float = true }) end, {
         desc = "Go to previous [D]iagnostic message"
     })
-    keymap.set("n", "]d", vim.diagnostic.goto_next, {
+    keymap.set("n", "]d", function() vim.diagnostic.jump({ count = 1, float = true }) end, {
         desc = "Go to next [D]iagnostic message"
     })
-    keymap.set("n", "<leader>e", vim.diagnostic.open_float, {
-        desc = "Show diagnostic [E]rror messages"
+    keymap.set("n", "<leader>de", vim.diagnostic.open_float, {
+        desc = "Show [D]iagnostic [E]rror messages"
     })
     keymap.set("n", "<leader>q", vim.diagnostic.setloclist, {
         desc = "Open diagnostic [Q]uickfix list"
@@ -109,9 +102,6 @@ local function telescope_keymaps()
     })
     keymap.set("n", "<leader>ff", builtin.find_files, {
         desc = "Fuzzy find files in cwd"
-    })
-    keymap.set("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>", {
-        desc = "Fuzzy find recent files"
     })
     keymap.set("n", "<leader>fc", "<cmd>Telescope grep_string<cr>", {
         desc = "Find string under cursor in cwd"
@@ -137,10 +127,10 @@ local function telescope_keymaps()
     keymap.set("n", "<leader>fw", builtin.grep_string, {
         desc = "Find Word under Cursor"
     })
-    keymap.set("n", "<leader>fgc", builtin.git_commits, {
+    keymap.set("n", "<leader>gc", builtin.git_commits, {
         desc = "Search Git Commits"
     })
-    keymap.set("n", "<leader>fgb", builtin.git_bcommits, {
+    keymap.set("n", "<leader>gC", builtin.git_bcommits, {
         desc = "Search Git Commits for Buffer"
     })
     keymap.set("n", "<leader>ps", function()
@@ -183,13 +173,13 @@ local function debugging_keymaps()
     keymap.set("n", "<F12>", function()
         dap.step_out()
     end)
-    keymap.set("n", "<Leader>b", function()
+    keymap.set("n", "<Leader>db", function()
         dap.toggle_breakpoint()
-    end)
-    keymap.set("n", "<Leader>B", function()
-        dap.set_breakpoint()
-    end)
-    keymap.set("n", "<Leader>lp", function()
+    end, { desc = "Toggle breakpoint" })
+    keymap.set("n", "<Leader>dB", function()
+        dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
+    end, { desc = "Conditional breakpoint" })
+    keymap.set("n", "<Leader>dL", function()
         dap.set_breakpoint(nil, nil, vim.fn.input("Log point message: "))
     end)
     keymap.set("n", "<Leader>dr", function()
@@ -285,11 +275,6 @@ local function navigator()
     -- keymap.set("n", "<C-l>", "<CMD>ZellijNavigateRight<CR>")
 
 end
-local function lazy_git()
-    keymap.set("n", "<leader>lg", "<cmd>LazyGit<cr>", {
-        desc = "Open lazy git"
-    })
-end
 local function copy_to_clipboard()
 
     keymap.set({"n","v"}, "<leader>y", [["+y]], {
@@ -313,7 +298,6 @@ return {
 
     config = function()
         copy_to_clipboard()
-        number_increment_decrement_keymaps()
         split_windows_keymaps()
         tabs_keymaps()
         disable_arrow_key_movement()
@@ -332,7 +316,6 @@ return {
         return_to_normal_mode()
         deselect_visual_mode()
         navigator()
-        lazy_git()
     end
 }
 

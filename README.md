@@ -6,6 +6,25 @@ Currently, I'm using the same dotfiles to work either on MacOS and Windows WSL.
 
 The main goal of this repository is to automate the setup of my development environment, installing all dependencies and setting up the configuration files.
 
+## Quick start
+
+| OS | Steps |
+|---|---|
+| Linux / macOS / WSL | `git clone git@github.com:dev-vinicius-andrade/dotfiles.git ~/dotfiles && cd ~/dotfiles && ./init.sh && envmgr dotfiles register . && envmgr dotfiles link` |
+| Windows (PowerShell 7) | `git clone https://github.com/dev-vinicius-andrade/dotfiles.git ~/dotfiles; cd ~/dotfiles; pwsh -File install.ps1` |
+
+Links come from `.dotfiles.config.json` (per-OS destinations). Then:
+
+- **secrets**: copy your age key to `~/.config/sops/age/keys.txt`; values live encrypted in
+  `secrets/env.sops.env` (`secrets_edit` / `Edit-Secrets`). See [secrets/README.md](secrets/README.md).
+- **machine-only settings**: `~/.zshenv.local`, `~/.zshrc.local` (or `profile.local.ps1` on Windows), never committed.
+- **yazi plugins**: `ya pkg install` (pinned in `yazi/package.toml`).
+- **herdr plugins**: `herdr plugin install aimdevlee/herdr-nvim-nav` and `herdr plugin install thanhdat77/herdr-navigator`.
+- **debug shell startup**: `DOTFILES_VERBOSE=1 zsh -i -c exit`; skip herdr with `DOTFILES_NO_HERDR=1`.
+
+Layout: `zsh/os/{linux,darwin,wsl}.zsh` hold OS-specific bits, everything else in `zsh/` is shared.
+A gitleaks pre-commit hook (`.githooks/`) and CI workflow block committed secrets.
+
 ## Table of contents
 
 Checkout the table of contents to navigate through the repository documentation.

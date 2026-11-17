@@ -1,0 +1,23 @@
+# gitleaks config: the default ruleset plus rules for the self-hosted tokens used in this repo,
+# which generic scanners (incl. GitHub secret scanning) don't recognise.
+title = "dotfiles"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "proxmox-api-token"
+description = "Proxmox VE API token (user@realm!tokenid=uuid)"
+regex = '''[A-Za-z0-9._-]+@[A-Za-z0-9._-]+![A-Za-z0-9._-]+=[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'''
+keywords = ["!"]
+
+[[rules]]
+id = "shell-exported-secret"
+description = "Shell export of a KEY/TOKEN/SECRET/PASSWORD with a literal value"
+regex = '''(?i)export\s+[A-Z0-9_]*(TOKEN|SECRET|PASSWORD|PASSWD|API_KEY|APIKEY|PRIVATE_KEY)[A-Z0-9_]*=["']?([^\s"'$]{12,})'''
+secretGroup = 2
+keywords = ["export"]
+
+[allowlist]
+description = "encrypted sops files hold ciphertext only"
+paths = ['''secrets/.*\.sops\.(env|ya?ml|json)$''']

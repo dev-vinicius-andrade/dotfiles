@@ -1,0 +1,4 @@
+# sops creation rules. Add more age recipients (one per machine/person) comma-separated.
+creation_rules:
+  - path_regex: secrets/.*\.sops\.(env|ya?ml|json)$
+    age: age19uy56nsv3nxejlsmr3t7lu2hx3pjdtq7lqrge4lpe44rj83sc4zsakltur
