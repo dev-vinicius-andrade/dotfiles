@@ -76,7 +76,14 @@ function cat_secrets(){
   cat $SECRET_ENV_FILE
 }
 function reload_zsh(){
-  exec zsh
+  # Re-exec a login zsh with a clean environment so stale exports (e.g. removed
+  # secrets) don't leak into the new shell. Only session/terminal vars are kept.
+  local -a keep=(HOME USER LOGNAME SHELL TERM COLORTERM TERM_PROGRAM LANG LC_ALL
+    DISPLAY WAYLAND_DISPLAY XDG_RUNTIME_DIR DBUS_SESSION_BUS_ADDRESS
+    SSH_AUTH_SOCK SSH_CONNECTION SSH_TTY TMUX TMUX_PANE ZELLIJ ZELLIJ_SESSION_NAME)
+  local -a pass=() v
+  for v in $keep; do [[ -n "${(P)v}" ]] && pass+=("$v=${(P)v}"); done
+  exec env -i "${pass[@]}" zsh -l
 }
 function source_zsh_recursive() {
   local folder="$1" file
