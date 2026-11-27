@@ -3,4 +3,5 @@
 # (ovis.homel4b.dev, LAN + WireGuard only) -> TLS -> this LAN HTTPS listener.
 # It admits private-IPv4 peers only, and only with a paired device or the token.
 OVIS_LAN_HTTPS_PORT=7318
-OVIS_LAN_HTTPS_HOST=10.10.10.10
+# No OVIS_LAN_HTTPS_HOST: each machine binds its own private IPv4 addresses (agents 10.10.10.10,
+# agents-ghost-cli 10.10.10.15, ...), so this file stays the same on every machine.
